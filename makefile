@@ -71,7 +71,7 @@ version: ## display the version of the API server
 
 .PHONY: db-start
 db-start: ## start the database server
-	docker run --rm --name ev_webservice_mongodb 
+	docker run --name ev_webservice_mongodb  -d mongo:latest 
 
 .PHONY: db-stop
 db-stop: ## stop the database server
