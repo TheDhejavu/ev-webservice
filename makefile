@@ -31,7 +31,7 @@ test-cover: test ## run unit tests and show test coverage information
 
 .PHONY: run
 run: ## run the API server
-	go run ${LDFLAGS} cmd/app/main.go
+	go run ${LDFLAGS} cmd/server/main.go
 
 .PHONY: start
 start: ## start docker compose
