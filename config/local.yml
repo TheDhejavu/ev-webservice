@@ -1,0 +1,12 @@
+version: 1.0.0
+debug: true
+server:
+  address: 8080
+database:
+  driver: "mysql"
+  host: "localhost"
+  port: 3308
+  user: "root"
+  password: ""
+  name: "patricia-crypto-service"
+dbsource: "mongodb://mongo:27017/"
