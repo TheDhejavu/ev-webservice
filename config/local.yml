@@ -1,12 +1,11 @@
 version: 1.0.0
 debug: true
 server:
-  address: 8080
+  port: 8080
 database:
-  driver: "mysql"
+  driver: "mongodb"
   host: "localhost"
-  port: 3308
-  user: "root"
-  password: ""
-  name: "patricia-crypto-service"
-dbsource: "mongodb://mongo:27017/"
+  port: 27017
+  name: "ev_webservice"
+db_source: "mongodb://mongo:27017/"
+jwt_signing_key: "xjhsussososerftgyhujikmnbvfcrt6y7u8ik"
