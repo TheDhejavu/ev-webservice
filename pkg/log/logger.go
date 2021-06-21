@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"go.uber.org/zap/zaptest/observer"
@@ -44,9 +45,31 @@ const (
 
 // New creates a new logger using the default configuration.
 func New(logFile string) Logger {
-	zapLogger, _ := zap.NewProduction()
+	// writerSyncer := getLogWriter(logFile)
+	// encoder := getEncoder()
+	// core := zapcore.NewCore(encoder, writerSyncer, zapcore.DebugLevel)
+	// zapLogger := zap.New(core, zap.AddCaller())
+	config := zap.NewProductionConfig()
+	config.OutputPaths = []string{"stdout", logFile}
+	zapLogger, _ := config.Build()
 
 	return NewWithZap(zapLogger)
+}
+func getEncoder() zapcore.Encoder {
+	encoderConfig := zap.NewProductionEncoderConfig()
+	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
+	return zapcore.NewConsoleEncoder(encoderConfig)
+}
+func getLogWriter(logFile string) zapcore.WriteSyncer {
+	lumberJackLogger := &lumberjack.Logger{
+		Filename:   logFile,
+		MaxSize:    10,
+		MaxBackups: 5,
+		MaxAge:     30,
+		Compress:   false,
+	}
+	return zapcore.AddSync(lumberJackLogger)
 }
 
 // NewWithZap creates a new logger using the preconfigured zap logger.

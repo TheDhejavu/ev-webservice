@@ -7,14 +7,16 @@ import (
 )
 
 const (
-	defaultServerPort         = 8080
-	defaultJWTExpirationHours = 72
-	defaultLogFile            = "./logs/app.log"
+	defaultServerPort    = 8080
+	defaultTokenDuration = "24h"
+	defaultLogFile       = "./logs/app.log"
+	defaultServerHost    = "0.0.0.0"
 )
 
 // Config represents an application configuration.
 type Server struct {
-	Port int `yaml:"port"`
+	Port int    `yaml:"port"`
+	Host string `yaml:"host"`
 }
 
 type Database struct {
@@ -24,13 +26,13 @@ type Database struct {
 	Name   string `yaml:"name"`
 }
 type Config struct {
-	Version       string `yaml:"version"`
-	Server        Server
-	DBSource      string `yaml:"db_source"`
-	Database      Database
-	JWTSigningKey string `yaml:"jwt_signing_key"`
-	JWTExpiration int    `yaml:"jwt_expiration"`
-	LogFile       string `yaml:"log_file"`
+	Version        string `yaml:"server_port"`
+	Server         Server
+	DBSource       string `yaml:"db_source"`
+	Database       Database
+	TokenSecretKey string `yaml:"token_secret_key"`
+	TokenDuration  string `yaml:"token_duration"`
+	LogFile        string `yaml:"log_file"`
 }
 
 // Validate validates the application configuration.
@@ -40,16 +42,17 @@ func (c Config) Validate() error {
 
 // Load returns an application configuration which is populated from the given configuration file and environment variables.
 func Load(file string) (*Config, error) {
-	// default config
+	// Default config
 	conf := Config{
 		Server: Server{
 			Port: defaultServerPort,
+			Host: defaultServerHost,
 		},
-		JWTExpiration: defaultJWTExpirationHours,
+		TokenDuration: defaultTokenDuration,
 		LogFile:       defaultLogFile,
 	}
 
-	// load from YAML config file
+	// Load from YAML config file
 	bytes, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil, err

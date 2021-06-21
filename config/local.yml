@@ -8,4 +8,5 @@ database:
   port: 27017
   name: "ev_webservice"
 db_source: "mongodb://mongo:27017/"
-jwt_signing_key: "xjhsussososerftgyhujikmnbvfcrt6y7u8ik"
+token_secret_key: "12345678901234567890123456789012"
+token_duration: "15m"

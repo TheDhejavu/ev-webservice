@@ -22,7 +22,9 @@ type Server struct {
 	router *gin.Engine
 }
 
-var flagConfig = flag.String("config", "./config/local.yml", "path to the config file")
+var (
+	flagConfig = flag.String("config", "./config/local.yml", "path to the config file")
+)
 
 func main() {
 	flag.Parse()
@@ -53,7 +55,7 @@ func main() {
 	database := client.Database(cfg.Database.Name)
 
 	server := NewServer(database)
-	address := fmt.Sprintf("0.0.0.0:%d", cfg.Server.Port)
+	address := fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port)
 
 	logger.Infof("server %v is running at %v", cfg.Version, address)
 	err = server.Start(address)

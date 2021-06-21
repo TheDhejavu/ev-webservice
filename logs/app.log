@@ -1,0 +1,8 @@
+{"level":"info","ts":1624310098.340804,"caller":"server/main.go:64","msg":"server  is running at 0.0.0.0:8080","version":""}
+{"level":"info","ts":1624310158.870435,"caller":"server/main.go:65","msg":"server  is running at 0.0.0.0:8080","version":""}
+{"level":"info","ts":1624310171.6245959,"caller":"server/main.go:65","msg":"server  is running at 0.0.0.0:8080","version":""}
+{"level":"info","ts":1624310241.515397,"caller":"server/main.go:66","msg":"server  is running at 0.0.0.0:8080","version":""}
+{"level":"info","ts":1624310253.026539,"caller":"server/main.go:66","msg":"server  is running at 0.0.0.0:8080","version":""}
+{"level":"info","ts":1624310271.5830789,"caller":"server/main.go:40","msg":"v2.local.vlyfUUdvBCYJzl1ilsNN6xDc4PfRJ0gNzrydj7gkXU_3ykuPxqju3xwi9qximwu1Euv1MDjD-T0roBWV05zLlRHY-aCE0OJI5fBoRdhvFTAy8puKMm-4W8CwcseZl45kLvoiIeHBhNELGUA2CeoEa3n0Q_Wd7s8rZUr006f9oWAe_H5yl1j8fu2bwsadvyRcq7jUuMJYXd_8SExJwzJ6Brw3h2PrlnpzwztGGwCHhrh_4U6KApbUDzQmbZVh2lZwH2NJF1mRk4LH.bnVsbA","version":""}
+{"level":"info","ts":1624310271.583372,"caller":"server/main.go:66","msg":"server  is running at 0.0.0.0:8080","version":""}
+{"level":"info","ts":1624310283.3789408,"caller":"server/main.go:60","msg":"server  is running at 0.0.0.0:8080","version":""}
