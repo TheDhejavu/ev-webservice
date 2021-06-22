@@ -1,11 +1,16 @@
 package entity
 
-import "context"
+import (
+	"context"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type Country struct {
-	Flag string `json:"flag" bson:"flag,omitempty"`
-	Name string `json:"name" bson:"name,omitempty"`
-	Slug string `json:"slug" bson:"slug,omitempty"`
+	ID   primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	Flag string             `json:"flag" bson:"flag,omitempty"`
+	Name string             `json:"name" bson:"name,omitempty"`
+	Slug string             `json:"slug" bson:"slug,omitempty"`
 }
 
 //  CountryService represent the Countrys's usecase

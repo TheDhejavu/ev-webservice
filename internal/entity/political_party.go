@@ -1,11 +1,19 @@
 package entity
 
-import "context"
+import (
+	"context"
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type PoliticalParty struct {
-	Name    string  `json:"name" bson:"name,omitempty"`
-	Slug    string  `json:"slug" bson:"slug,omitempty"`
-	Country Country `json:"country" bson:"country,omitempty"`
+	ID        primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	Name      string             `json:"name" bson:"name,omitempty"`
+	Slug      string             `json:"slug" bson:"slug,omitempty"`
+	CountryId string             `json:"country_id" bson:"country_id,omitempty"`
+	Country   primitive.ObjectID `json:"country" bson:"country,omitempty"`
+	CreatedAt time.Time          `json:"created_at" bson:"created_at,omitempty"`
 }
 
 //  PoliticalPartyService represent the PoliticalPartys's usecase

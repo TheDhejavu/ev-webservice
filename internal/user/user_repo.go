@@ -20,7 +20,7 @@ type mongoUserRepository struct {
 
 func NewMongoUserRepository(db *mongo.Database, logger log.Logger) entity.UserRepository {
 
-	collection := db.Collection("Users")
+	collection := db.Collection("users")
 	return &mongoUserRepository{collection, logger}
 }
 
@@ -32,7 +32,7 @@ func (repo *mongoUserRepository) Fetch(ctx context.Context, filter interface{}) 
 
 	cursor, err := repo.Collection.Find(ctx, filter)
 	if err != nil {
-		repo.logger.Errorf("Find transaction error: %s", err)
+		repo.logger.Errorf("Fetch transaction error: %s", err)
 		return Users, err
 	}
 
@@ -53,7 +53,7 @@ func (repo *mongoUserRepository) GetByID(ctx context.Context, id string) (entity
 	}
 	err = repo.Collection.FindOne(ctx, bson.M{"_id": _id}).Decode(&User)
 	if err != nil {
-		repo.logger.Errorf("GetByID transaction error: %s", err)
+		repo.logger.Errorf("FindOne transaction error: %s", err)
 		return User, err
 	}
 	return User, nil

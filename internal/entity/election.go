@@ -22,9 +22,10 @@ type Election struct {
 }
 
 type Candidate struct {
-	FullName       string         `json:"title" bson:"title,omitempty"`
-	Position       string         `json:"position" bson:"position,omitempty"`
-	PoliticalParty PoliticalParty `json:"political_party" bson:"political_party,omitempty"`
+	ID             primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	FullName       string             `json:"title" bson:"title,omitempty"`
+	Position       string             `json:"position" bson:"position,omitempty"`
+	PoliticalParty primitive.ObjectID `json:"political_party" bson:"political_party,omitempty"`
 }
 type AccreditationAt struct {
 	Start time.Time `json:"start" bson:"start,omitempty"`
@@ -41,7 +42,7 @@ type ElectionService interface {
 	Fetch(ctx context.Context, filter interface{}) (res []Election, err error)
 	GetByID(ctx context.Context, id string) (Election, error)
 	Update(ctx context.Context, id string, data interface{}) (Election, error)
-	Create(ctx context.Context, Election Election) (Election, error)
+	Create(ctx context.Context, election Election) (Election, error)
 	Delete(ctx context.Context, id string) error
 	GetResult(ctx context.Context, filter interface{}) (res []Election, err error)
 }

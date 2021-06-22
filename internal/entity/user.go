@@ -13,7 +13,6 @@ type User struct {
 	Username  string             `json:"username" bson:"username,omitempty"`
 	Email     string             `json:"email" bson:"email"`
 	Password  string             `json:"password" bson:"password"`
-	Identity  primitive.ObjectID `json:"identity" bson:"identity,omitempty"`
 	Role      string             `json:"roles" bson:"roles"`
 	UpdatedAt time.Time          `json:"updated_at" bson:"updated_at,omitempty"`
 	CreatedAt time.Time          `json:"created_at" bson:"created_at,omitempty"`
