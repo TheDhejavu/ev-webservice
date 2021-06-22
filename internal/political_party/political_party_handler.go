@@ -38,6 +38,7 @@ func (p *politicalPartyService) Delete(ctx context.Context, id string) error {
 func (p *politicalPartyService) GetBySlug(ctx context.Context, slug string) (res entity.PoliticalParty, err error) {
 	return
 }
-func (p *politicalPartyService) GetByCountry(ctx context.Context, country string) (res entity.PoliticalParty, err error) {
-	return
-}
+
+// func (p *politicalPartyService) GetByCountry(ctx context.Context, country string) (res entity.PoliticalParty, err error) {
+// 	return
+// }
