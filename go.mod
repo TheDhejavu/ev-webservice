@@ -6,7 +6,10 @@ require (
 	github.com/aead/chacha20poly1305 v0.0.0-20201124145622-1a5aba2a8b29
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fatih/structs v1.1.0
+	github.com/gin-contrib/requestid v0.0.1
 	github.com/gin-gonic/gin v1.7.2
+	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
+	github.com/go-ozzo/ozzo-validation/v4 v4.3.0 // indirect
 	github.com/go-playground/locales v0.13.0
 	github.com/go-playground/universal-translator v0.17.0
 	github.com/go-playground/validator v9.31.0+incompatible

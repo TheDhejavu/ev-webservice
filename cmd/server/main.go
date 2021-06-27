@@ -8,8 +8,12 @@ import (
 	"os"
 	"time"
 
+	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"
 	"github.com/workspace/evoting/ev-webservice/internal/config"
+	"github.com/workspace/evoting/ev-webservice/internal/consensusgroup"
+	"github.com/workspace/evoting/ev-webservice/internal/country"
+	"github.com/workspace/evoting/ev-webservice/internal/politicalparty"
 	"github.com/workspace/evoting/ev-webservice/internal/user"
 	"github.com/workspace/evoting/ev-webservice/pkg/log"
 	"github.com/workspace/evoting/ev-webservice/pkg/token"
@@ -64,7 +68,15 @@ func NewServer(db *mongo.Database, config *config.Config, logger log.Logger) (*S
 
 //  buildHandler sets up the HTTP routing and builds an HTTP handler.
 func (server *Server) buildHandler() {
+	// Middlewares
+	{
+		//recovery middleware
+		server.router.Use(gin.Recovery())
+		//middleware which injects a 'RequestID' into the context and header of each request.
+		server.router.Use(requestid.New())
+	}
 	v1 := server.router.Group("/api/v1")
+
 	//Register user handlers
 	user.RegisterHandlers(
 		v1,
@@ -72,6 +84,35 @@ func (server *Server) buildHandler() {
 			user.NewMongoUserRepository(server.db, server.logger),
 			server.logger,
 		),
+		server.logger,
+	)
+
+	//Register country handlers and service
+	countryService := country.NewCountryService(
+		country.NewMongoCountryRepository(server.db, server.logger),
+		server.logger,
+	)
+	country.RegisterHandlers(v1, countryService, server.logger)
+
+	//Register Political Party handlers
+	politicalparty.RegisterHandlers(
+		v1,
+		politicalparty.NewPoliticalPartyService(
+			politicalparty.NewMongoPoliticalPartyRepository(server.db, server.logger),
+			server.logger,
+		),
+		countryService,
+		server.logger,
+	)
+
+	//Register consensus group handlers
+	consensusgroup.RegisterHandlers(
+		v1,
+		consensusgroup.NewGroupService(
+			consensusgroup.NewMongoGroupRepository(server.db, server.logger),
+			server.logger,
+		),
+		countryService,
 		server.logger,
 	)
 }

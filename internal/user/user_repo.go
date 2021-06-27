@@ -4,11 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/workspace/evoting/ev-webservice/internal/entity"
-	customErr "github.com/workspace/evoting/ev-webservice/internal/errors"
+	"github.com/workspace/evoting/ev-webservice/internal/utils"
 	"github.com/workspace/evoting/ev-webservice/pkg/log"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -20,10 +19,6 @@ type mongoUserRepository struct {
 	Collection *mongo.Collection
 	logger     log.Logger
 }
-
-var (
-	ErrInvalidId = errors.New("Invalid User ID")
-)
 
 // NewMongoUserRepository creates a new user repository.
 func NewMongoUserRepository(db *mongo.Database, logger log.Logger) entity.UserRepository {
@@ -71,7 +66,7 @@ func (repo *mongoUserRepository) GetByID(ctx context.Context, id string) (entity
 	if err != nil {
 		switch err {
 		case mongo.ErrNoDocuments:
-			return User, customErr.ErrEntityDoesNotExist
+			return User, entity.ErrNotFound
 		default:
 			repo.logger.Errorf("FindOne transaction error: %s", err)
 			return User, err
@@ -89,7 +84,7 @@ func (repo *mongoUserRepository) GetByEmail(ctx context.Context, email string) (
 	if err != nil {
 		switch err {
 		case mongo.ErrNoDocuments:
-			return User, customErr.ErrEntityDoesNotExist
+			return User, entity.ErrNotFound
 		default:
 			repo.logger.Errorf("GetByEmail transaction error: %s", err)
 			return User, err
@@ -108,7 +103,7 @@ func (repo *mongoUserRepository) GetByUsername(ctx context.Context, username str
 	if err != nil {
 		switch err {
 		case mongo.ErrNoDocuments:
-			return User, customErr.ErrEntityDoesNotExist
+			return User, entity.ErrNotFound
 		default:
 			repo.logger.Errorf("GetByEmail transaction error: %s", err)
 			return User, err
@@ -118,51 +113,16 @@ func (repo *mongoUserRepository) GetByUsername(ctx context.Context, username str
 	return User, nil
 }
 
-func constructNotEqualQuery(data map[string]interface{}, query bson.M) (bson.M, error) {
-	for field, value := range data {
-		if field == "id" {
-			id := fmt.Sprintf("%v", value)
-			_id, err := primitive.ObjectIDFromHex(id)
-			if err != nil {
-				return query, ErrInvalidId
-			}
-			query["_id"] = bson.M{"$ne": _id}
-		} else {
-			query[field] = bson.M{"$ne": value}
-		}
-	}
-
-	return query, nil
-}
-func constructQuery(data map[string]interface{}) (bson.M, error) {
-	query := bson.M{}
-
-	for field, value := range data {
-
-		if field == "id" {
-			id := fmt.Sprintf("%v", value)
-			_id, err := primitive.ObjectIDFromHex(id)
-			if err != nil {
-				return query, ErrInvalidId
-			}
-			query["_id"] = _id
-		} else {
-			query[field] = value
-		}
-	}
-	return query, nil
-}
-
 // GetWithExclude gets the user with the specified user excluding some other data.
 func (repo *mongoUserRepository) GetWithExclude(ctx context.Context, user map[string]interface{}, exclude map[string]interface{}) (entity.User, error) {
 	User := entity.User{}
-	query, err := constructQuery(user)
-	query, err = constructNotEqualQuery(exclude, query)
+	query, err := utils.ConstructQuery(user)
+	query, err = utils.ConstructNotEqualQuery(exclude, query)
 
 	if err != nil {
 		switch err {
-		case ErrInvalidId:
-			return User, ErrInvalidId
+		case entity.ErrInvalidId:
+			return User, entity.ErrInvalidId
 		default:
 			return User, err
 		}
@@ -172,7 +132,7 @@ func (repo *mongoUserRepository) GetWithExclude(ctx context.Context, user map[st
 	if err != nil {
 		switch err {
 		case mongo.ErrNoDocuments:
-			return User, customErr.ErrEntityDoesNotExist
+			return User, entity.ErrNotFound
 		default:
 			repo.logger.Errorf("GetWithExclude transaction error: %s", err)
 			return User, err
@@ -187,7 +147,7 @@ func (repo *mongoUserRepository) Update(ctx context.Context, id string, updateUs
 	var result entity.User
 	_id, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return result, errors.New("Invalid User ID")
+		return result, entity.ErrInvalidId
 	}
 
 	User, err := repo.GetByID(ctx, id)
@@ -211,6 +171,8 @@ func (repo *mongoUserRepository) Update(ctx context.Context, id string, updateUs
 	}
 
 	delete(existingUser, "_id")
+	delete(existingUser, "id")
+	delete(existingUser, "createdAt")
 
 	_, err = repo.Collection.UpdateOne(ctx, bson.M{"_id": _id}, bson.M{"$set": existingUser})
 	if err != nil {
@@ -247,7 +209,7 @@ func (repo *mongoUserRepository) Delete(ctx context.Context, id string) error {
 	if err != nil {
 		switch err {
 		case mongo.ErrNoDocuments:
-			return customErr.ErrEntityDoesNotExist
+			return entity.ErrNotFound
 		default:
 			repo.logger.Errorf("Delete transaction error: %s", err)
 			return err

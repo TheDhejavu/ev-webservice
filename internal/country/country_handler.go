@@ -1,4 +1,4 @@
-package user
+package country
 
 import (
 	"errors"
@@ -14,37 +14,37 @@ import (
 	"github.com/workspace/evoting/ev-webservice/pkg/log"
 )
 
-// UserHandler  represent the httphandler for Users
-type userHandler struct {
-	service entity.UserService
+// CountryHandler  represent the httphandler for Countrys
+type countryHandler struct {
+	service entity.CountryService
 	logger  log.Logger
 	v       *utils.CustomValidator
 }
 
-// RegisterHandlers will initialize the Users resources endpoint
-func RegisterHandlers(router *gin.RouterGroup, service entity.UserService, logger log.Logger) {
-	handler := &userHandler{
+// RegisterHandlers will initialize the Countrys resources endpoint
+func RegisterHandlers(router *gin.RouterGroup, service entity.CountryService, logger log.Logger) {
+	handler := &countryHandler{
 		service: service,
 		logger:  logger,
 		v:       utils.CustomValidators(),
 	}
 
-	router.GET("/users", handler.GetUsers)
-	router.POST("/users", handler.CreateUser)
-	router.GET("/users/:id", handler.GetUser)
-	router.DELETE("/users/:id", handler.DeleteUser)
-	router.PUT("/users/:id", handler.UpdateUser)
+	router.GET("/countries", handler.GetCountries)
+	router.POST("/country", handler.CreateCountry)
+	router.GET("/country/:id", handler.GetCountry)
+	router.DELETE("/country/:id", handler.DeleteCountry)
+	router.PUT("/country/:id", handler.UpdateCountry)
 }
 
-// CreateUser will create new users
-func (handler userHandler) CreateUser(ctx *gin.Context) {
+// CreateCountry will create new Countrys
+func (handler countryHandler) CreateCountry(ctx *gin.Context) {
 
-	var userRequest createUserRequest
-	if err := ctx.ShouldBindJSON(&userRequest); err != nil {
-		handler.logger.Error(err)
+	var countryRequest createCountryRequest
+	if err := ctx.ShouldBindJSON(&countryRequest); err != nil {
 		if errors.Is(err, io.EOF) {
-			err = errors.New("Please Provide a valid user information")
+			err = errors.New("Please Provide a valid Country information")
 		}
+		handler.logger.With(ctx).Error(err)
 		utils.GinErrorResponse(
 			ctx,
 			customErr.BadRequest(err.Error()),
@@ -52,8 +52,8 @@ func (handler userHandler) CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	handler.logger.Info(userRequest)
-	err := userRequest.Validate(ctx, handler)
+	handler.logger.Info(countryRequest)
+	err := countryRequest.Validate(ctx, handler)
 	if err != nil {
 		handler.logger.Error(err)
 		utils.GinErrorResponse(
@@ -63,7 +63,7 @@ func (handler userHandler) CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	User, err := handler.service.Create(ctx, utils.StructToMap(userRequest))
+	Country, err := handler.service.Store(ctx, utils.StructToMap(countryRequest))
 	if err != nil {
 		handler.logger.Error(err)
 		utils.GinErrorResponse(
@@ -74,15 +74,15 @@ func (handler userHandler) CreateUser(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"data":    User,
+		"data":    Country,
 		"message": "Successfully Created",
 	})
 }
 
-// GetUsers gets all users
-func (handler *userHandler) GetUsers(ctx *gin.Context) {
+// GetCountrys gets all Countrys
+func (handler *countryHandler) GetCountries(ctx *gin.Context) {
 
-	handler.logger.Info("get users")
+	handler.logger.Info("get Countries")
 	result, err := handler.service.Fetch(ctx, nil)
 	if err != nil {
 		handler.logger.Error(err)
@@ -99,9 +99,9 @@ func (handler *userHandler) GetUsers(ctx *gin.Context) {
 	})
 }
 
-// GetUser get a user with specified ID
-func (handler userHandler) GetUser(ctx *gin.Context) {
-	var params userRequestParams
+// GetCountry get a Country with specified ID
+func (handler countryHandler) GetCountry(ctx *gin.Context) {
+	var params countryRequestParams
 	if err := ctx.ShouldBindUri(&params); err != nil {
 		handler.logger.Error(err)
 		utils.GinErrorResponse(
@@ -119,7 +119,7 @@ func (handler userHandler) GetUser(ctx *gin.Context) {
 		case entity.ErrNotFound:
 			utils.GinErrorResponse(
 				ctx,
-				customErr.NotFound("User with provided ID does not exist"),
+				customErr.NotFound("Country with provided ID does not exist"),
 			)
 			return
 		default:
@@ -135,28 +135,22 @@ func (handler userHandler) GetUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"data": result})
 }
 
-// UpdateUser updates a user with specified ID
-func (handler userHandler) UpdateUser(ctx *gin.Context) {
-	var body updateUserRequest
-	var params userRequestParams
+// UpdateCountry updates a Country with specified ID
+func (handler countryHandler) UpdateCountry(ctx *gin.Context) {
+	var body updateCountryRequest
+	var params countryRequestParams
 	if err := ctx.ShouldBindJSON(&body); err != nil {
 		handler.logger.Error(err)
 		if errors.Is(err, io.EOF) {
-			err = errors.New("Please Provide a valid user information")
+			err = errors.New("Please Provide a valid country information")
 		}
-		utils.GinErrorResponse(
-			ctx,
-			customErr.BadRequest(err.Error()),
-		)
+		utils.GinErrorResponse(ctx, customErr.BadRequest(err.Error()))
 		return
 	}
 
 	if err := ctx.ShouldBindUri(&params); err != nil {
 		handler.logger.Error(err)
-		utils.GinErrorResponse(
-			ctx,
-			customErr.BadRequest(err.Error()),
-		)
+		utils.GinErrorResponse(ctx, customErr.BadRequest(err.Error()))
 		return
 	}
 
@@ -170,34 +164,31 @@ func (handler userHandler) UpdateUser(ctx *gin.Context) {
 		return
 	}
 
-	user, err := handler.service.Update(ctx, params.Id, utils.StructToMap(body))
+	country, err := handler.service.Update(ctx, params.Id, utils.StructToMap(body))
 	if err != nil {
 		handler.logger.Error(err)
 		switch err {
 		case entity.ErrNotFound:
 			utils.GinErrorResponse(
 				ctx,
-				customErr.NotFound("Unable to update user that does not exist"),
+				customErr.NotFound("Unable to update Country that does not exist"),
 			)
 			return
 		default:
-			utils.GinErrorResponse(
-				ctx,
-				customErr.InternalServerError(err.Error()),
-			)
+			utils.GinErrorResponse(ctx, customErr.InternalServerError(err.Error()))
 			return
 		}
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"data":    user,
+		"data":    country,
 		"message": "Successfully Updated",
 	})
 }
 
-// DeleteUser deletes a user with specified ID
-func (handler userHandler) DeleteUser(ctx *gin.Context) {
-	var params userRequestParams
+// DeleteCountry deletes a Country with specified ID
+func (handler countryHandler) DeleteCountry(ctx *gin.Context) {
+	var params countryRequestParams
 	if err := ctx.ShouldBindUri(&params); err != nil {
 		handler.logger.Error(err)
 		utils.GinErrorResponse(ctx, customErr.BadRequest(err.Error()))
@@ -211,14 +202,11 @@ func (handler userHandler) DeleteUser(ctx *gin.Context) {
 		case entity.ErrNotFound:
 			utils.GinErrorResponse(
 				ctx,
-				customErr.NotFound("User with provided ID does not exist"),
+				customErr.NotFound("Country with provided ID does not exist"),
 			)
 			return
 		default:
-			utils.GinErrorResponse(
-				ctx,
-				customErr.InternalServerError(err.Error()),
-			)
+			utils.GinErrorResponse(ctx, customErr.InternalServerError(err.Error()))
 			return
 		}
 	}

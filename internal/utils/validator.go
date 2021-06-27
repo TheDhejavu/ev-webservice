@@ -2,11 +2,13 @@ package utils
 
 import (
 	"log"
+	"net/url"
 
 	"github.com/go-playground/locales/en"
 	ut "github.com/go-playground/universal-translator"
 	validator "github.com/go-playground/validator/v10"
 	en_translations "github.com/go-playground/validator/v10/translations/en"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type CustomValidator struct {
@@ -66,8 +68,40 @@ func CustomValidators() *CustomValidator {
 		return t
 	})
 
+	_ = v.RegisterTranslation("valid_country", trans, func(ut ut.Translator) error {
+		return ut.Add("valid_country", "country is not valid", true)
+	}, func(ut ut.Translator, fe validator.FieldError) string {
+		t, _ := ut.T("valid_country", fe.Field())
+		return t
+	})
+
+	_ = v.RegisterTranslation("url", trans, func(ut ut.Translator) error {
+		return ut.Add("url", "url is not valid", true)
+	}, func(ut ut.Translator, fe validator.FieldError) string {
+		t, _ := ut.T("url", fe.Field())
+		return t
+	})
+
 	_ = v.RegisterValidation("password", func(fl validator.FieldLevel) bool {
 		return len(fl.Field().String()) > 6
+	})
+
+	_ = v.RegisterValidation("url", func(fl validator.FieldLevel) bool {
+		fieldValue := fl.Field().String()
+		_, err := url.ParseRequestURI(fieldValue)
+		if err != nil {
+			return false
+		}
+		return true
+	})
+
+	_ = v.RegisterValidation("valid_country", func(fl validator.FieldLevel) bool {
+		fieldValue := fl.Field().String()
+		_, err := primitive.ObjectIDFromHex(fieldValue)
+		if err != nil {
+			return false
+		}
+		return true
 	})
 
 	return &CustomValidator{v, trans}

@@ -18,14 +18,14 @@ func (request *createUserRequest) Validate(ctx context.Context, handler userHand
 	handler.v.Validator.RegisterValidation("exists", func(fl validator.FieldLevel) bool {
 		fieldName := fl.FieldName()
 		if fieldName == "Email" {
-			value, _ := handler.service.IsEmailTaken(ctx, fl.Field().String())
+			value, _ := handler.service.IsEmailTaken(ctx, fl.Field().String(), nil)
 			if value {
 				return false
 			}
 			return true
 		}
 		if fieldName == "Username" {
-			value, _ := handler.service.IsUsernameTaken(ctx, fl.Field().String())
+			value, _ := handler.service.IsUsernameTaken(ctx, fl.Field().String(), nil)
 			if value {
 				return false
 			}
@@ -40,30 +40,30 @@ func (request *createUserRequest) Validate(ctx context.Context, handler userHand
 }
 
 type userRequestParams struct {
-	Id string `uri:"id" validate:"required,not_exists"`
+	Id string `uri:"id" validate:"required"`
 }
 
 type updateUserRequest struct {
 	FullName string `json:"fullname" validate:"min=6"`
-	Username string `json:"username" validate:"not_exists"`
-	Email    string `json:"email" validate:"email,not_exists"`
+	Username string `json:"username" validate:"exists"`
+	Email    string `json:"email" validate:"email,exists"`
 	Password string `json:"password" validate:"password"`
 	Role     string `json:"role"`
 }
 
 func (request *updateUserRequest) Validate(ctx context.Context, handler userHandler, params userRequestParams) error {
-	handler.v.Validator.RegisterValidation("not_exists", func(fl validator.FieldLevel) bool {
+	handler.v.Validator.RegisterValidation("exists", func(fl validator.FieldLevel) bool {
 		fieldName := fl.FieldName()
 		fieldValue := fl.Field().String()
 		if fieldName == "Email" && fieldValue != "" {
-			value, _ := handler.service.IsEmailTakenByOthers(ctx, params.Id, fl.Field().String())
+			value, _ := handler.service.IsEmailTaken(ctx, fl.Field().String(), params.Id)
 			if value {
 				return false
 			}
 			return true
 		}
 		if fieldName == "Username" && fieldValue != "" {
-			value, _ := handler.service.IsUsernameTakenByOthers(ctx, params.Id, fl.Field().String())
+			value, _ := handler.service.IsUsernameTaken(ctx, fl.Field().String(), params.Id)
 			if value {
 				return false
 			}
