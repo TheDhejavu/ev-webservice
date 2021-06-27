@@ -20,10 +20,10 @@ var (
 
 	colorTextEncoderConfig = zapcore.EncoderConfig{
 		MessageKey: "M",
-		// LevelKey:   "L",
-		//TimeKey:        "T",
-		NameKey:   "N",
-		CallerKey: "C",
+		LevelKey:   "L",
+		TimeKey:    "T",
+		NameKey:    "N",
+		CallerKey:  "C",
 		// StacktraceKey: "S",
 		LineEnding:  zapcore.DefaultLineEnding,
 		EncodeLevel: zapcore.CapitalColorLevelEncoder,
