@@ -12,7 +12,7 @@ type countryService struct {
 	logger      log.Logger
 }
 
-func NewcountryService(countryRepo entity.CountryRepository, logger log.Logger) entity.CountryService {
+func NewCountryService(countryRepo entity.CountryRepository, logger log.Logger) entity.CountryService {
 	return &countryService{
 		countryRepo: countryRepo,
 		logger:      logger,

@@ -18,6 +18,6 @@ type VoteService interface {
 	Fetch(ctx context.Context, filter interface{}) (res []Vote, err error)
 	GetByID(ctx context.Context, id string) (Vote, error)
 	Cast(ctx context.Context, Vote Vote) (Vote, error)
-	Start(ctx context.Context, id string) (Election, error)
-	Stop(ctx context.Context, id string) (Election, error)
+	Start(ctx context.Context, id string) (Vote, error)
+	Stop(ctx context.Context, id string) (Vote, error)
 }

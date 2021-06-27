@@ -28,13 +28,6 @@ RUN go mod verify
 COPY . .
 RUN make build
 
-
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates bash
-RUN mkdir -p /var/log/app
-WORKDIR /app/
-COPY --from=build /app/server .
-COPY --from=build /app/scripts/entrypoint.sh .
-COPY --from=build /app/config/*.yml ./config/
+COPY /scripts/entrypoint.sh .
 RUN ls -la
 ENTRYPOINT ["bash", "./entrypoint.sh"]

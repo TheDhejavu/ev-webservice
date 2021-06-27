@@ -10,10 +10,11 @@ import (
 //User represent the user entity
 type User struct {
 	ID        primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	FullName  string             `json:"fullname" bson:"fullname,omitempty"`
 	Username  string             `json:"username" bson:"username,omitempty"`
 	Email     string             `json:"email" bson:"email"`
 	Password  string             `json:"password" bson:"password"`
-	Role      string             `json:"roles" bson:"roles"`
+	Role      string             `json:"role" bson:"role"`
 	UpdatedAt time.Time          `json:"updated_at" bson:"updated_at,omitempty"`
 	CreatedAt time.Time          `json:"created_at" bson:"created_at,omitempty"`
 }
@@ -22,10 +23,15 @@ type User struct {
 type UserService interface {
 	Fetch(ctx context.Context, filter interface{}) (res []User, err error)
 	GetByID(ctx context.Context, id string) (User, error)
-	CheckEmailIsTaken(ctx context.Context, email string) (User, error)
+	IdExists(ctx context.Context, id string) (bool, error)
+	IsEmailTaken(ctx context.Context, email string) (bool, error)
+	IsUsernameTaken(ctx context.Context, username string) (bool, error)
+	IsEmailTakenByOthers(ctx context.Context, id string, email string) (bool, error)
+	IsUsernameTakenByOthers(ctx context.Context, id string, username string) (bool, error)
 	GetByEmail(ctx context.Context, email string) (User, error)
-	Update(ctx context.Context, id string, data interface{}) (User, error)
-	Store(ctx context.Context, User User) (User, error)
+	GetByUsername(ctx context.Context, username string) (User, error)
+	Update(ctx context.Context, id string, user map[string]interface{}) (User, error)
+	Create(ctx context.Context, user map[string]interface{}) (User, error)
 	Delete(ctx context.Context, id string) error
 }
 
@@ -34,7 +40,9 @@ type UserRepository interface {
 	Fetch(ctx context.Context, filter interface{}) (res []User, err error)
 	GetByID(ctx context.Context, id string) (User, error)
 	GetByEmail(ctx context.Context, email string) (User, error)
-	Update(ctx context.Context, id string, data interface{}) (User, error)
-	Store(ctx context.Context, User User) (User, error)
+	GetByUsername(ctx context.Context, username string) (User, error)
+	Update(ctx context.Context, id string, user map[string]interface{}) (User, error)
+	Create(ctx context.Context, User User) (User, error)
+	GetWithExclude(ctx context.Context, user map[string]interface{}, exclude map[string]interface{}) (User, error)
 	Delete(ctx context.Context, id string) error
 }

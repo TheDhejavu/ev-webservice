@@ -3,13 +3,14 @@ package log
 
 import (
 	"context"
+	"io"
 	"net/http"
+	"os"
 
 	"github.com/google/uuid"
 	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"go.uber.org/zap/zaptest/observer"
 )
 
 // Logger is a logger that supports log levels, context and structured logging.
@@ -45,21 +46,11 @@ const (
 
 // New creates a new logger using the default configuration.
 func New(logFile string) Logger {
-	// writerSyncer := getLogWriter(logFile)
-	// encoder := getEncoder()
-	// core := zapcore.NewCore(encoder, writerSyncer, zapcore.DebugLevel)
-	// zapLogger := zap.New(core, zap.AddCaller())
-	config := zap.NewProductionConfig()
-	config.OutputPaths = []string{"stdout", logFile}
-	zapLogger, _ := config.Build()
+	writerSyncer := getLogWriter(logFile)
+	core := zapcore.NewCore(NewColortextEncoder(), writerSyncer, zapcore.DebugLevel)
+	zapLogger := zap.New(core, zap.AddCaller())
 
 	return NewWithZap(zapLogger)
-}
-func getEncoder() zapcore.Encoder {
-	encoderConfig := zap.NewProductionEncoderConfig()
-	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
-	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
-	return zapcore.NewConsoleEncoder(encoderConfig)
 }
 func getLogWriter(logFile string) zapcore.WriteSyncer {
 	lumberJackLogger := &lumberjack.Logger{
@@ -69,7 +60,9 @@ func getLogWriter(logFile string) zapcore.WriteSyncer {
 		MaxAge:     30,
 		Compress:   false,
 	}
-	return zapcore.AddSync(lumberJackLogger)
+	mWriter := io.MultiWriter(os.Stderr, lumberJackLogger)
+
+	return zapcore.AddSync(mWriter)
 }
 
 // NewWithZap creates a new logger using the preconfigured zap logger.
@@ -77,10 +70,19 @@ func NewWithZap(zapLogger *zap.Logger) Logger {
 	return &logger{zapLogger.Sugar()}
 }
 
-// NewForTest returns a new logger and the corresponding observed logs which can be used in unit tests to verify log entries.
-func NewForTest() (Logger, *observer.ObservedLogs) {
-	core, recorded := observer.New(zapcore.InfoLevel)
-	return NewWithZap(zap.New(core)), recorded
+// NewTextEncoder returns a new text Encoder.
+func NewTextEncoder() zapcore.Encoder {
+	return zapcore.NewConsoleEncoder(textEncoderConfig)
+}
+
+// NewColortextEncoder returns a new colortext Encoder.
+func NewColortextEncoder() zapcore.Encoder {
+	return zapcore.NewConsoleEncoder(colorTextEncoderConfig)
+}
+
+// NewJSONEncoder returns a new JSON encoder.
+func NewJSONEncoder() zapcore.Encoder {
+	return zapcore.NewJSONEncoder(jsonEncoderConfig)
 }
 
 // With returns a logger based off the root logger and decorates it with the given context and arguments.

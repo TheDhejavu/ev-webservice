@@ -67,11 +67,12 @@ version: ## display the version of the API server
 
 .PHONY: db-start
 db-start: ## start the database server
-	docker run --name ev_webservice_mongodb  -d mongo:latest 
+	docker run --name ev_webservice_mongodb  -d -p 27017:27017 mongo:latest 
 
 .PHONY: db-stop
 db-stop: ## stop the database server
 	docker stop ev_webservice_mongodb
+	docker rm ev_webservice_mongodb
 
 .PHONY: lint
 lint: ## run golint on all Go package
