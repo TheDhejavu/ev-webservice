@@ -42,3 +42,24 @@ func ConstructQuery(data map[string]interface{}) (bson.M, error) {
 	}
 	return query, nil
 }
+
+func ConstructQueryWithTypes(filter map[string]interface{}, types map[string][]string) (query bson.M, err error) {
+	for k, values := range types {
+		if k == "object_id" {
+			for i := 0; i < len(values); i++ {
+				value := filter[values[i]]
+				key := values[i]
+				if _, ok := filter[key]; ok {
+					_id, err := primitive.ObjectIDFromHex(fmt.Sprintf("%s", value))
+					if err != nil {
+						return query, entity.ErrInvalidId
+					}
+					filter[key] = _id
+				}
+			}
+		}
+	}
+
+	query, err = ConstructQuery(filter)
+	return query, nil
+}

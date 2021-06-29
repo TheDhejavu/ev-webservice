@@ -11,7 +11,7 @@ type createUserRequest struct {
 	Email    string `json:"email" validate:"required,email,exists"`
 	Password string `json:"password" validate:"required,password"`
 	Role     string `json:"role" validate:"required,oneof=user admin"`
-	FullName string `json:"fullname" validate:"required,min=6"`
+	FullName string `json:"full_name" validate:"required,min=6"`
 }
 
 func (request *createUserRequest) Validate(ctx context.Context, handler userHandler) error {
@@ -44,7 +44,7 @@ type userRequestParams struct {
 }
 
 type updateUserRequest struct {
-	FullName string `json:"fullname" validate:"min=6"`
+	FullName string `json:"full_name" validate:"min=6"`
 	Username string `json:"username" validate:"exists"`
 	Email    string `json:"email" validate:"email,exists"`
 	Password string `json:"password" validate:"password"`

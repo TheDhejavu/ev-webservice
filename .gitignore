@@ -17,6 +17,7 @@ coverage*.*
 # postgres data volume used by postgres server container for testing purpose
 testdata/
 
+storage/
 # server binary
 ./server
 

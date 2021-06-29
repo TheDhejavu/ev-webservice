@@ -2,11 +2,10 @@ package consensusgroup
 
 import (
 	"context"
-	"fmt"
+	"encoding/json"
 
 	"github.com/workspace/evoting/ev-webservice/internal/entity"
 	"github.com/workspace/evoting/ev-webservice/pkg/log"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type groupService struct {
@@ -43,17 +42,17 @@ func (service *groupService) Update(ctx context.Context, id string, data map[str
 	return
 }
 func (service *groupService) Create(ctx context.Context, group map[string]interface{}) (res entity.ConsensusGroupRead, err error) {
-	country := fmt.Sprintf("%v", group["country"])
-	country_id, err := primitive.ObjectIDFromHex(country)
-
-	new_group := entity.ConsensusGroup{
-		Name:      fmt.Sprintf("%v", group["name"]),
-		ServerUrl: fmt.Sprintf("%v", group["server_url"]),
-		PublicKey: fmt.Sprintf("%v", group["public_key"]),
-		Country:   country_id,
+	jsonbody, err := json.Marshal(group)
+	if err != nil {
+		return
 	}
 
-	res, err = service.groupRepo.Create(ctx, new_group)
+	newGroup := &entity.ConsensusGroup{}
+	if err = json.Unmarshal(jsonbody, &newGroup); err != nil {
+		return
+	}
+
+	res, err = service.groupRepo.Create(ctx, *newGroup)
 	if err != nil {
 		return
 	}
@@ -61,6 +60,7 @@ func (service *groupService) Create(ctx context.Context, group map[string]interf
 }
 func (service *groupService) Delete(ctx context.Context, id string) (err error) {
 	value, _ := service.Exists(ctx, map[string]interface{}{"_id": id}, nil)
+
 	if value == false {
 		return entity.ErrNotFound
 	}

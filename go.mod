@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/aead/chacha20poly1305 v0.0.0-20201124145622-1a5aba2a8b29
+	github.com/chilts/sid v0.0.0-20190607042430-660e94789ec9
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fatih/structs v1.1.0
 	github.com/gin-contrib/requestid v0.0.1
@@ -18,11 +19,18 @@ require (
 	github.com/google/uuid v1.2.0
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/json-iterator/go v1.1.11 // indirect
+	github.com/kjk/betterguid v0.0.0-20170621091430-c442874ba63a
+	github.com/lithammer/shortuuid v3.0.0+incompatible
 	github.com/mattn/go-colorable v0.1.8
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/o1egl/paseto v1.0.0
+	github.com/oklog/ulid v1.3.1
+	github.com/rs/xid v1.3.0
+	github.com/satori/go.uuid v1.2.0
+	github.com/segmentio/ksuid v1.0.3
 	github.com/sirupsen/logrus v1.8.1
+	github.com/sony/sonyflake v1.0.0
 	github.com/stretchr/testify v1.7.0
 	go.mongodb.org/mongo-driver v1.5.3
 	go.uber.org/zap v1.17.0

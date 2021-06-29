@@ -10,9 +10,12 @@ import (
 
 	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"
+	"github.com/workspace/evoting/ev-webservice/internal/auth"
 	"github.com/workspace/evoting/ev-webservice/internal/config"
 	"github.com/workspace/evoting/ev-webservice/internal/consensusgroup"
 	"github.com/workspace/evoting/ev-webservice/internal/country"
+	"github.com/workspace/evoting/ev-webservice/internal/election"
+	"github.com/workspace/evoting/ev-webservice/internal/identity"
 	"github.com/workspace/evoting/ev-webservice/internal/politicalparty"
 	"github.com/workspace/evoting/ev-webservice/internal/user"
 	"github.com/workspace/evoting/ev-webservice/pkg/log"
@@ -51,6 +54,9 @@ func NewServer(db *mongo.Database, config *config.Config, logger log.Logger) (*S
 	}
 	router := gin.Default()
 
+	// // Set a lower memory limit for multipart forms (default is 32 MiB)
+	// router.MaxMultipartMemory = 8 << 20 // 8 MiB
+
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{"API": "Web service"})
 	})
@@ -68,7 +74,7 @@ func NewServer(db *mongo.Database, config *config.Config, logger log.Logger) (*S
 
 //  buildHandler sets up the HTTP routing and builds an HTTP handler.
 func (server *Server) buildHandler() {
-	// Middlewares
+	// General Middlewares
 	{
 		//recovery middleware
 		server.router.Use(gin.Recovery())
@@ -76,6 +82,12 @@ func (server *Server) buildHandler() {
 		server.router.Use(requestid.New())
 	}
 	v1 := server.router.Group("/api/v1")
+	v1AuthRoutes := server.router.Group("/api/v1")
+
+	// API V1 Middlewares
+	{
+		v1AuthRoutes.Use(auth.AuthMiddleware(server.tokenMaker))
+	}
 
 	//Register user handlers
 	user.RegisterHandlers(
@@ -95,12 +107,13 @@ func (server *Server) buildHandler() {
 	country.RegisterHandlers(v1, countryService, server.logger)
 
 	//Register Political Party handlers
+	politicalPartyService := politicalparty.NewPoliticalPartyService(
+		politicalparty.NewMongoPoliticalPartyRepository(server.db, server.logger),
+		server.logger,
+	)
 	politicalparty.RegisterHandlers(
 		v1,
-		politicalparty.NewPoliticalPartyService(
-			politicalparty.NewMongoPoliticalPartyRepository(server.db, server.logger),
-			server.logger,
-		),
+		politicalPartyService,
 		countryService,
 		server.logger,
 	)
@@ -113,6 +126,30 @@ func (server *Server) buildHandler() {
 			server.logger,
 		),
 		countryService,
+		server.logger,
+	)
+
+	//Register election handlers
+	election.RegisterHandlers(
+		v1,
+		election.NewElectionService(
+			election.NewMongoElectionRepository(server.db, server.logger),
+			server.logger,
+		),
+		countryService,
+		politicalPartyService,
+		server.logger,
+	)
+
+	//Register identity handlers
+	identity.RegisterHandlers(
+		v1,
+		identity.NewIdentityService(
+			identity.NewMongoIdentityRepository(server.db, server.logger),
+			server.logger,
+		),
+		countryService,
+		server.config,
 		server.logger,
 	)
 }

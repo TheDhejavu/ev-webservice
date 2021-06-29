@@ -10,3 +10,4 @@ database:
 db_source: "mongodb://0.0.0.0:27017/"
 token_secret_key: "12345678901234567890123456789012"
 token_duration: "15m"
+file_storage_path: "./storage"

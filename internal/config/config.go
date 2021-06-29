@@ -26,13 +26,14 @@ type Database struct {
 	Name   string `yaml:"name"`
 }
 type Config struct {
-	Version        string `yaml:"server_port"`
-	Server         Server
-	DBSource       string `yaml:"db_source"`
-	Database       Database
-	TokenSecretKey string `yaml:"token_secret_key"`
-	TokenDuration  string `yaml:"token_duration"`
-	LogFile        string `yaml:"log_file"`
+	Version         string `yaml:"server_port"`
+	Server          Server
+	DBSource        string `yaml:"db_source"`
+	Database        Database
+	TokenSecretKey  string `yaml:"token_secret_key"`
+	TokenDuration   string `yaml:"token_duration"`
+	LogFile         string `yaml:"log_file"`
+	FileStoragePath string `yaml:"file_storage_path"`
 }
 
 // Validate validates the application configuration.

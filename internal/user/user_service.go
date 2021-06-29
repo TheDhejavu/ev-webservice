@@ -70,7 +70,7 @@ func (service *userService) Create(ctx context.Context, user map[string]interfac
 		Username: fmt.Sprintf("%v", user["username"]),
 		Password: hashedPassword,
 		Role:     fmt.Sprintf("%v", user["role"]),
-		FullName: fmt.Sprintf("%v", user["fullname"]),
+		FullName: fmt.Sprintf("%v", user["full_name"]),
 	}
 
 	res, err = service.userRepo.Create(ctx, new_user)
@@ -82,6 +82,7 @@ func (service *userService) Create(ctx context.Context, user map[string]interfac
 
 // Delete deletes user with specified ID.
 func (service *userService) Delete(ctx context.Context, id string) (err error) {
+
 	value, _ := service.IdExists(ctx, id)
 	if value == false {
 		return entity.ErrNotFound

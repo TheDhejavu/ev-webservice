@@ -26,17 +26,31 @@ func NewMongoGroupRepository(db *mongo.Database, logger log.Logger) entity.Conse
 	return &mongoGroupRepository{collection, logger}
 }
 
-func mongoPartyPipeline(match bson.D) mongo.Pipeline {
-	matchStage := bson.D{{"$match", match}}
-	lookupStage := bson.D{{"$lookup", bson.D{{"from", "countries"}, {"localField", "country"}, {"foreignField", "_id"}, {"as", "country"}}}}
-	unwindStage := bson.D{{"$unwind", bson.D{{"path", "$country"}, {"preserveNullAndEmptyArrays", false}}}}
-
-	return mongo.Pipeline{lookupStage, matchStage, unwindStage}
+func mongoPartyPipeline(match bson.M) []bson.M {
+	return []bson.M{
+		{
+			"$match": match,
+		},
+		{
+			"$lookup": bson.M{
+				"from":         "countries",
+				"localField":   "country",
+				"foreignField": "_id",
+				"as":           "country",
+			},
+		},
+		{
+			"$unwind": bson.M{
+				"path":                       "$country",
+				"preserveNullAndEmptyArrays": false,
+			},
+		},
+	}
 }
 
 // Fetch returns the political parties with the specified filter from Mongo.
 func (repo *mongoGroupRepository) Fetch(ctx context.Context, filter interface{}) (res []entity.ConsensusGroupRead, err error) {
-	_filter := bson.D{}
+	_filter := bson.M{}
 
 	cursor, err := repo.Collection.Aggregate(ctx, mongoPartyPipeline(_filter))
 
@@ -70,7 +84,7 @@ func (repo *mongoGroupRepository) GetByID(ctx context.Context, id string) (entit
 
 	cursor, err := repo.Collection.Aggregate(
 		ctx,
-		mongoPartyPipeline(bson.D{{"_id", _id}}),
+		mongoPartyPipeline(bson.M{"_id": _id}),
 	)
 
 	if err != nil {
@@ -98,7 +112,7 @@ func (repo *mongoGroupRepository) GetByCountry(ctx context.Context, country stri
 		return ConsensusGroup, entity.ErrInvalidId
 	}
 
-	cursor, err := repo.Collection.Aggregate(ctx, mongoPartyPipeline(bson.D{{"country", _id}}))
+	cursor, err := repo.Collection.Aggregate(ctx, mongoPartyPipeline(bson.M{"country": _id}))
 
 	if err != nil {
 		repo.logger.Errorf("GetByCountry transaction error: %s", err)
@@ -119,7 +133,7 @@ func (repo *mongoGroupRepository) GetByCountry(ctx context.Context, country stri
 func (repo *mongoGroupRepository) GetByPubKey(ctx context.Context, publicKey string) (entity.ConsensusGroupRead, error) {
 	ConsensusGroup := entity.ConsensusGroupRead{}
 
-	cursor, err := repo.Collection.Aggregate(ctx, mongoPartyPipeline(bson.D{{"public_key", publicKey}}))
+	cursor, err := repo.Collection.Aggregate(ctx, mongoPartyPipeline(bson.M{"public_key": publicKey}))
 
 	if err != nil {
 		repo.logger.Errorf("GetByPubkey transaction error: %s", err)
@@ -176,26 +190,14 @@ func (repo *mongoGroupRepository) GetWithExclude(ctx context.Context, group map[
 
 // Get gets the ConsensusGroup with the specified ConsensusGroup
 func (repo *mongoGroupRepository) Get(ctx context.Context, filter map[string]interface{}) (entity.ConsensusGroupRead, error) {
-	ConsensusGroup := entity.ConsensusGroupRead{}
-	query := bson.M{}
-	if value, ok := filter["country"]; ok {
 
-		_id, err := primitive.ObjectIDFromHex(fmt.Sprintf("%s", value))
-		if err != nil {
-			return ConsensusGroup, entity.ErrInvalidId
-		}
-		query, err = utils.ConstructQuery(bson.M{"country": _id})
-		delete(filter, "country")
-	}
-	query, err := utils.ConstructQuery(filter)
+	ConsensusGroup := entity.ConsensusGroupRead{}
+	query, err := utils.ConstructQueryWithTypes(filter, map[string][]string{
+		"object_id": {"country", "_id"},
+	})
 
 	if err != nil {
-		switch err {
-		case entity.ErrInvalidId:
-			return ConsensusGroup, entity.ErrInvalidId
-		default:
-			return ConsensusGroup, err
-		}
+		return ConsensusGroup, err
 	}
 	err = repo.Collection.FindOne(ctx, query).Decode(&ConsensusGroup)
 

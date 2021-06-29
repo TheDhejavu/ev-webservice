@@ -8,12 +8,12 @@ import (
 )
 
 type Country struct {
-	ID        primitive.ObjectID `json:"id" bson:"_id,omitempty"`
-	Flag      string             `json:"flag" bson:"flag,omitempty"`
-	Name      string             `json:"name" bson:"name,omitempty"`
-	Slug      string             `json:"slug" bson:"slug,omitempty"`
-	UpdatedAt time.Time          `json:"updated_at" bson:"updated_at,omitempty"`
-	CreatedAt time.Time          `json:"created_at" bson:"created_at,omitempty"`
+	ID        primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
+	Flag      string             `json:"flag,omitempty" bson:"flag,omitempty"`
+	Name      string             `json:"name,omitempty" bson:"name,omitempty"`
+	Slug      string             `json:"slug,omitempty" bson:"slug,omitempty"`
+	UpdatedAt time.Time          `json:"updated_at,omitempty" bson:"updated_at,omitempty"`
+	CreatedAt time.Time          `json:"created_at,omitempty" bson:"created_at,omitempty"`
 }
 
 //  CountryService represent the Countrys's usecase

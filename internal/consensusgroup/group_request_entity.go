@@ -2,7 +2,6 @@ package consensusgroup
 
 import (
 	"context"
-	"fmt"
 
 	ut "github.com/go-playground/universal-translator"
 	validator "github.com/go-playground/validator/v10"
@@ -85,7 +84,7 @@ func (request updateGroupRequest) Validate(ctx context.Context, handler GroupHan
 					"_id": params.Id,
 				},
 			)
-			fmt.Println("EXXXXXXISTS", value)
+
 			if value {
 				return false
 			}

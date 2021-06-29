@@ -26,17 +26,31 @@ func NewMongoPoliticalPartyRepository(db *mongo.Database, logger log.Logger) ent
 	return &mongoPoliticalPartyRepository{collection, logger}
 }
 
-func mongoPartyPipeline(match bson.D) mongo.Pipeline {
-	matchStage := bson.D{{"$match", match}}
-	lookupStage := bson.D{{"$lookup", bson.D{{"from", "countries"}, {"localField", "country"}, {"foreignField", "_id"}, {"as", "country"}}}}
-	unwindStage := bson.D{{"$unwind", bson.D{{"path", "$country"}, {"preserveNullAndEmptyArrays", false}}}}
-
-	return mongo.Pipeline{lookupStage, matchStage, unwindStage}
+func mongoPartyPipeline(match bson.M) []bson.M {
+	return []bson.M{
+		{
+			"$match": match,
+		},
+		{
+			"$lookup": bson.M{
+				"from":         "countries",
+				"localField":   "country",
+				"foreignField": "_id",
+				"as":           "country",
+			},
+		},
+		{
+			"$unwind": bson.M{
+				"path":                       "$country",
+				"preserveNullAndEmptyArrays": false,
+			},
+		},
+	}
 }
 
 // Fetch returns the political parties with the specified filter from Mongo.
 func (repo *mongoPoliticalPartyRepository) Fetch(ctx context.Context, filter interface{}) (res []entity.PoliticalPartyRead, err error) {
-	_filter := bson.D{}
+	_filter := bson.M{}
 
 	cursor, err := repo.Collection.Aggregate(ctx, mongoPartyPipeline(_filter))
 
@@ -65,7 +79,7 @@ func (repo *mongoPoliticalPartyRepository) GetByID(ctx context.Context, id strin
 
 	cursor, err := repo.Collection.Aggregate(
 		ctx,
-		mongoPartyPipeline(bson.D{{"_id", _id}}),
+		mongoPartyPipeline(bson.M{"_id": _id}),
 	)
 
 	if err != nil {
@@ -93,7 +107,7 @@ func (repo *mongoPoliticalPartyRepository) GetByCountry(ctx context.Context, cou
 		return politicalParty, entity.ErrInvalidId
 	}
 
-	cursor, err := repo.Collection.Aggregate(ctx, mongoPartyPipeline(bson.D{{"country", _id}}))
+	cursor, err := repo.Collection.Aggregate(ctx, mongoPartyPipeline(bson.M{"country": _id}))
 
 	if err != nil {
 		repo.logger.Errorf("GetByCountry transaction error: %s", err)
@@ -114,7 +128,7 @@ func (repo *mongoPoliticalPartyRepository) GetByCountry(ctx context.Context, cou
 func (repo *mongoPoliticalPartyRepository) GetBySlug(ctx context.Context, slug string) (entity.PoliticalPartyRead, error) {
 	politicalParty := entity.PoliticalPartyRead{}
 
-	cursor, err := repo.Collection.Aggregate(ctx, mongoPartyPipeline(bson.D{{"slug", slug}}))
+	cursor, err := repo.Collection.Aggregate(ctx, mongoPartyPipeline(bson.M{"slug": slug}))
 
 	if err != nil {
 		repo.logger.Errorf("GetBySlug transaction error: %s", err)
@@ -132,18 +146,11 @@ func (repo *mongoPoliticalPartyRepository) GetBySlug(ctx context.Context, slug s
 }
 
 // GetWithExclude gets the PoliticalParty with the specified PoliticalParty excluding some other data.
-func (repo *mongoPoliticalPartyRepository) GetWithExclude(ctx context.Context, politicalParty map[string]interface{}, exclude map[string]interface{}) (entity.PoliticalParty, error) {
+func (repo *mongoPoliticalPartyRepository) GetWithExclude(ctx context.Context, filter map[string]interface{}, exclude map[string]interface{}) (entity.PoliticalParty, error) {
 	PoliticalParty := entity.PoliticalParty{}
-	query := bson.M{}
-	if value, ok := politicalParty["country"]; ok {
-		_id, err := primitive.ObjectIDFromHex(fmt.Sprintf("%s", value))
-		if err != nil {
-			return PoliticalParty, entity.ErrInvalidId
-		}
-		query, err = utils.ConstructQuery(bson.M{"country": _id})
-		delete(politicalParty, "country")
-	}
-	query, err := utils.ConstructQuery(politicalParty)
+	query, err := utils.ConstructQueryWithTypes(filter, map[string][]string{
+		"object_id": {"country", "_id"},
+	})
 	query, err = utils.ConstructNotEqualQuery(exclude, query)
 
 	if err != nil {
@@ -172,16 +179,10 @@ func (repo *mongoPoliticalPartyRepository) GetWithExclude(ctx context.Context, p
 // Get gets the PoliticalParty with the specified PoliticalParty
 func (repo *mongoPoliticalPartyRepository) Get(ctx context.Context, filter map[string]interface{}) (entity.PoliticalParty, error) {
 	PoliticalParty := entity.PoliticalParty{}
-	query := bson.M{}
-	if value, ok := filter["country"]; ok {
-		_id, err := primitive.ObjectIDFromHex(fmt.Sprintf("%s", value))
-		if err != nil {
-			return PoliticalParty, entity.ErrInvalidId
-		}
-		query, err = utils.ConstructQuery(bson.M{"country": _id})
-		delete(filter, "country")
-	}
-	query, err := utils.ConstructQuery(filter)
+	query, err := utils.ConstructQueryWithTypes(filter, map[string][]string{
+		"object_id": {"country", "_id"},
+	})
+	query, err = utils.ConstructQuery(filter)
 
 	if err != nil {
 		switch err {

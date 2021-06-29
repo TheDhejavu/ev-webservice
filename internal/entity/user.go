@@ -10,7 +10,7 @@ import (
 //User represent the user entity
 type User struct {
 	ID        primitive.ObjectID `json:"id" bson:"_id,omitempty"`
-	FullName  string             `json:"fullname" bson:"fullname,omitempty"`
+	FullName  string             `json:"full_name" bson:"full_name,omitempty"`
 	Username  string             `json:"username" bson:"username,omitempty"`
 	Email     string             `json:"email" bson:"email"`
 	Password  string             `json:"password" bson:"password"`
