@@ -9,6 +9,8 @@ require (
 	github.com/fatih/structs v1.1.0
 	github.com/gin-contrib/requestid v0.0.1
 	github.com/gin-gonic/gin v1.7.2
+	github.com/go-ozzo/ozzo-routing v2.1.4+incompatible
+	github.com/go-ozzo/ozzo-routing/v2 v2.3.0
 	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
 	github.com/go-ozzo/ozzo-validation/v4 v4.3.0 // indirect
 	github.com/go-playground/locales v0.13.0
@@ -20,6 +22,7 @@ require (
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/json-iterator/go v1.1.11 // indirect
 	github.com/kjk/betterguid v0.0.0-20170621091430-c442874ba63a
+	github.com/lib/pq v1.10.2 // indirect
 	github.com/lithammer/shortuuid v3.0.0+incompatible
 	github.com/mattn/go-colorable v0.1.8
 	github.com/modern-go/reflect2 v1.0.1 // indirect
@@ -38,9 +41,11 @@ require (
 	golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
+	google.golang.org/appengine v1.6.7
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	gopkg.in/olahol/melody.v1 v1.0.0-20170518105555-d52139073376
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
+	honnef.co/go/tools v0.2.0
 )

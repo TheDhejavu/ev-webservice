@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	"github.com/workspace/evoting/ev-webservice/internal/entity"
+	crypto "github.com/workspace/evoting/ev-webservice/pkg/crypto"
 	"github.com/workspace/evoting/ev-webservice/pkg/log"
 )
 
@@ -66,7 +67,12 @@ func (service *identityService) Create(ctx context.Context, data map[string]inte
 	if err = json.Unmarshal(jsonbody, &Identity); err != nil {
 		return
 	}
+	hashedPassword, err := crypto.HashPassword(Identity.Password)
+	Identity.Password = hashedPassword
 
+	if err != nil {
+		return
+	}
 	res, err = service.identityRepo.Create(ctx, *Identity)
 	if err != nil {
 		return

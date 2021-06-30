@@ -41,7 +41,7 @@ var (
 
 // NewServer creates a new HTTP server and set up routing.
 func NewServer(db *mongo.Database, config *config.Config, logger log.Logger) (*Server, error) {
-	tokenMaker, err := token.NewPasetoMaker(config.TokenSecretKey)
+	tokenMaker, err := token.NewJWTMaker(config.TokenSecretKey)
 	if err != nil {
 		return nil, fmt.Errorf("Could not create token maker instance: %w", err)
 	}
@@ -82,20 +82,10 @@ func (server *Server) buildHandler() {
 		server.router.Use(requestid.New())
 	}
 	v1 := server.router.Group("/api/v1")
-	v1AuthRoutes := server.router.Group("/api/v1")
-
-	// API V1 Middlewares
-	{
-		v1AuthRoutes.Use(auth.AuthMiddleware(server.tokenMaker))
-	}
 
 	//Register user handlers
-	user.RegisterHandlers(
-		v1,
-		user.NewUserService(
-			user.NewMongoUserRepository(server.db, server.logger),
-			server.logger,
-		),
+	userService := user.NewUserService(
+		user.NewMongoUserRepository(server.db, server.logger),
 		server.logger,
 	)
 
@@ -105,6 +95,46 @@ func (server *Server) buildHandler() {
 		server.logger,
 	)
 	country.RegisterHandlers(v1, countryService, server.logger)
+
+	user.RegisterHandlers(
+		v1,
+		userService,
+		server.logger,
+	)
+
+	//Register identity handlers
+	identityService := identity.NewIdentityService(
+		identity.NewMongoIdentityRepository(server.db, server.logger),
+		server.logger,
+	)
+
+	authMiddleware := auth.NewAuthMiddleware(
+		userService,
+		identityService,
+		server.tokenMaker,
+		server.logger,
+	)
+
+	identity.RegisterHandlers(
+		v1,
+		identityService,
+		countryService,
+		authMiddleware,
+		server.config,
+		server.logger,
+	)
+
+	//Register auth handlers
+	auth.RegisterHandlers(
+		v1,
+		auth.NewIdentityService(
+			identityService,
+			userService,
+			server.logger,
+			server.tokenMaker,
+		),
+		server.logger,
+	)
 
 	//Register Political Party handlers
 	politicalPartyService := politicalparty.NewPoliticalPartyService(
@@ -138,20 +168,10 @@ func (server *Server) buildHandler() {
 		),
 		countryService,
 		politicalPartyService,
+		authMiddleware,
 		server.logger,
 	)
 
-	//Register identity handlers
-	identity.RegisterHandlers(
-		v1,
-		identity.NewIdentityService(
-			identity.NewMongoIdentityRepository(server.db, server.logger),
-			server.logger,
-		),
-		countryService,
-		server.config,
-		server.logger,
-	)
 }
 
 // buildSocketHandler handles socket

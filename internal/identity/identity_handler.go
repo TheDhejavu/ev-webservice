@@ -15,12 +15,14 @@ import (
 
 	customErr "github.com/workspace/evoting/ev-webservice/internal/errors"
 	"github.com/workspace/evoting/ev-webservice/pkg/log"
+	"github.com/workspace/evoting/ev-webservice/pkg/token"
 )
 
 // identityHandler   represent the httphandler for Identities
 type identityHandler struct {
 	service        entity.IdentityService
 	countryService entity.CountryService
+	authMiddleware entity.AuthMiddleware
 	logger         log.Logger
 	v              *utils.CustomValidator
 	conf           config.Config
@@ -31,12 +33,14 @@ func RegisterHandlers(
 	router *gin.RouterGroup,
 	service entity.IdentityService,
 	countryService entity.CountryService,
+	authMiddleware entity.AuthMiddleware,
 	conf config.Config,
 	logger log.Logger,
 ) {
 	handler := &identityHandler{
 		service:        service,
 		countryService: countryService,
+		authMiddleware: authMiddleware,
 		logger:         logger,
 		conf:           conf,
 		v:              utils.CustomValidators(),
@@ -53,10 +57,11 @@ func RegisterHandlers(
 func (handler identityHandler) CreateIdentity(ctx *gin.Context) {
 
 	var body createIdentityRequest
-	if err := ctx.Bind(&body); err != nil {
+	if err := ctx.ShouldBind(&body); err != nil {
 		if errors.Is(err, io.EOF) {
 			err = errors.New("Please Provide a valid Identity information")
 		}
+
 		handler.logger.With(ctx).Error(err)
 		utils.GinErrorResponse(
 			ctx,
@@ -65,25 +70,7 @@ func (handler identityHandler) CreateIdentity(ctx *gin.Context) {
 		return
 	}
 
-	// National ID Card
-	nationalIdCard, err := ctx.FormFile("national_id_card")
-	if err != nil {
-		ctx.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
-		return
-	}
-
-	ext := filepath.Ext(nationalIdCard.Filename)
-	fileName := fmt.Sprintf("%s_%s%s", utils.GenKsuid(), "national_id_card", ext)
-	fileDestination := filepath.Join(handler.conf.FileStoragePath, fileName)
-	if err := ctx.SaveUploadedFile(nationalIdCard, fileDestination); err != nil {
-		handler.logger.With(ctx).Error(err)
-		utils.GinErrorResponse(
-			ctx,
-			customErr.BadRequest(fmt.Sprintf("upload file err: %s", err.Error())),
-		)
-		return
-	}
-	err = body.Validate(ctx, handler)
+	err := body.Validate(ctx, handler)
 	if err != nil {
 		handler.logger.Error(err)
 		utils.GinErrorResponse(
@@ -92,11 +79,35 @@ func (handler identityHandler) CreateIdentity(ctx *gin.Context) {
 		)
 		return
 	}
-	identity := utils.StructToMap(body)
-	identity["national_id_card"] = fileName
-	identity["voter_card"] = fileName
-	identity["birth_certificate"] = fileName
 
+	identity := utils.StructToMap(body)
+	fileNames := []string{
+		"national_id_card",
+		"voter_card",
+		"birth_certificate",
+	}
+	for i := 0; i < len(fileNames); i++ {
+		file, err := ctx.FormFile(fileNames[i])
+		if err != nil {
+			handler.logger.With(ctx).Error(err)
+			utils.GinErrorResponse(
+				ctx,
+				customErr.BadRequest(fmt.Sprintf("get form err: %s", err.Error())),
+			)
+		}
+		ext := filepath.Ext(file.Filename)
+		fileName := fmt.Sprintf("%s_%s%s", utils.GenUUID(), fileNames[i], ext)
+		fileDestination := filepath.Join(handler.conf.FileStoragePath, fileName)
+		if err := ctx.SaveUploadedFile(file, fileDestination); err != nil {
+			handler.logger.With(ctx).Error(err)
+			utils.GinErrorResponse(
+				ctx,
+				customErr.BadRequest(fmt.Sprintf("upload file err: %s", err.Error())),
+			)
+			return
+		}
+		identity[fileNames[i]] = fileName
+	}
 	Identity, err := handler.service.Create(ctx, identity)
 	if err != nil {
 		handler.logger.Error(err)
@@ -146,7 +157,8 @@ func (handler identityHandler) GetIdentity(ctx *gin.Context) {
 	}
 
 	result, err := handler.service.GetByID(ctx, params.Id)
-
+	authPayload := ctx.MustGet("authorization_payload").(*token.Payload)
+	fmt.Println(authPayload)
 	if err != nil {
 		handler.logger.Error(err)
 		switch err {

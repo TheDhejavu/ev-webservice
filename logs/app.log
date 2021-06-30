@@ -5761,3 +5761,231 @@ Key: 'createIdentityRequest.Residence.Address' Error:Field validation for 'Addre
 [34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
 [34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
 [34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[31mERROR[0m	identity/identity_handler.go:60	unexpected end of JSON input	{"request_id": "321c0986-71a7-4cf9-86a9-1c73325b747e"}
+[31mERROR[0m	identity/identity_handler.go:60	unexpected end of JSON input	{"request_id": "125612d5-dc35-422d-97fd-8848352a1839"}
+[31mERROR[0m	identity/identity_handler.go:60	invalid character 'm' looking for beginning of value	{"request_id": "92da77d5-d8d5-48a6-a9ff-172c7d775ea0"}
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[31mERROR[0m	identity/identity_handler.go:60	unexpected end of JSON input	{"request_id": "028c12b1-fb2e-49a0-9bee-7f4415133fe2"}
+[31mERROR[0m	identity/identity_handler.go:60	unexpected end of JSON input	{"request_id": "b6ab309b-7575-41a0-b9eb-1799bbae0a6b"}
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[31mERROR[0m	identity/identity_handler.go:60	unexpected end of JSON input	{"request_id": "2fdbb02b-5ddc-42cf-afe6-f0d1812ff4b7"}
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[31mERROR[0m	identity/identity_handler.go:60	unexpected end of JSON input	{"request_id": "1ca992e2-b70a-41e4-a02d-1197223251c7"}
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[31mERROR[0m	identity/identity_handler.go:61	unexpected end of JSON input	{"request_id": "dbb65d6a-4b5b-45a3-a959-168a83be6415"}
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[31mERROR[0m	identity/identity_handler.go:61	unexpected end of JSON input	{"request_id": "f97a1cda-4181-47fa-aeb9-8fecaedadf80"}
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[31mERROR[0m	identity/identity_handler.go:62	unexpected end of JSON input	{"request_id": "4e4e1992-4048-4284-9baa-ae2ddad3adb7"}
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[31mERROR[0m	identity/identity_handler.go:61	unexpected end of JSON input	{"request_id": "737370a1-6781-4f1d-8095-4573a20d3c78"}
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[31mERROR[0m	identity/identity_handler.go:61	unexpected end of JSON input	{"request_id": "168c8a07-f6dc-4c43-9de9-b7fdd9243293"}
+[31mERROR[0m	identity/identity_handler.go:71	Key: 'createIdentityRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[31mERROR[0m	identity/identity_handler.go:71	Key: 'createIdentityRequest.Origin.Country' Error:Field validation for 'Country' failed on the 'not_exists' tag
+Key: 'createIdentityRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag
+[31mERROR[0m	identity/identity_handler.go:71	Key: 'createIdentityRequest.Email' Error:Field validation for 'Email' failed on the 'email' tag
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:226	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_handler.go:70	username or password is wrong
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_handler.go:70	username or password is wrong
+[31mERROR[0m	auth/auth_handler.go:70	username or password is wrong
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_handler.go:116	username or password is wrong
+[31mERROR[0m	auth/auth_handler.go:96	json: cannot unmarshal string into Go struct field loginIdentity.digits of type uint64	{"request_id": "2791c2d8-dc8d-4110-bf96-299a02117456"}
+[31mERROR[0m	auth/auth_handler.go:116	username or password is wrong
+[31mERROR[0m	auth/auth_handler.go:116	username or password is wrong
+[31mERROR[0m	auth/auth_handler.go:116	username or password is wrong
+[34mINFO[0m	identity/identity_handler.go:126	get Identities
+[34mINFO[0m	identity/identity_handler.go:137	[{ObjectID("60dbc09b9621e8808c9619bf") 4294967295 Akinola Ayodeji {{ObjectID("60d9ec2243360e9a94d9abfb") https://flag.io/ngn China CHN 0001-01-01 00:00:00 +0000 UTC 2021-06-28 15:34:58.757 +0000 UTC} Ekiti Ado Basiri} {{ObjectID("60d9ec2243360e9a94d9abfb") https://flag.io/ngn China CHN 0001-01-01 00:00:00 +0000 UTC 2021-06-28 15:34:58.757 +0000 UTC} Ado Basiri} akinayodeji4all@gmail.com $2a$10$/22GzWndQr5gaNwShg5lPuTgb6a5i0WF1Hn5Av.ibWXSvWdG6xuZu dc1e3a6c-81c1-45e1-a72e-113dc22e94b7_birth_certificate.png 6ee02054-7f18-4635-af1c-7ac4840a4748_national_id_card.png ccf5728d-4875-4adc-a575-2436224d8bf4_voter_card.png 0001-01-01 00:00:00 +0000 UTC 2021-06-30 00:53:47.046 +0000 UTC}]
+[31mERROR[0m	auth/auth_handler.go:116	username or password is wrong
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_handler.go:116	digits or password is wrong
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_handler.go:116	digits or password is wrong
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_handler.go:116	digits or password is wrong
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_handler.go:116	digits or password is wrong
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_handler.go:116	digits or password is wrong
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_handler.go:116	digits or password is wrong
+[31mERROR[0m	auth/auth_handler.go:116	digits or password is wrong
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_handler.go:116	digits or password is wrong
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:243	listen tcp 0.0.0.0:8080: bind: address already in use
+[31mERROR[0m	auth/auth_handler.go:116	digits or password is wrong
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:240	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:241	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:241	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:241	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:235	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:235	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:235	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:235	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:235	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:209	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:237	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:238	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:245	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080

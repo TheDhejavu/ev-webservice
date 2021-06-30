@@ -10,7 +10,7 @@ import (
 // Identity represent the Identity entity
 type Identity struct {
 	ID               primitive.ObjectID `json:"id" bson:"_id,omitempty"`
-	Digits           uint64             `json:"digits" bson:"digit,omitempty"`
+	Digits           uint64             `json:"digits" bson:"digits,omitempty"`
 	FirstName        string             `json:"first_name" bson:"first_name,omitempty"`
 	LastName         string             `json:"last_name" bson:"last_name,omitempty"`
 	Origin           Origin             `json:"origin" bson:"origin,omitempty"`
@@ -23,7 +23,6 @@ type Identity struct {
 	UpdatedAt        time.Time          `json:"updated_at" bson:"updated_at,omitempty"`
 	CreatedAt        time.Time          `json:"created_at" bson:"created_at,omitempty"`
 }
-
 type Origin struct {
 	Country primitive.ObjectID `json:"country" bson:"country,omitempty"`
 	State   string             `json:"state" bson:"state,omitempty"`
@@ -40,13 +39,13 @@ type Residence struct {
 // Identity represent the Identity entity
 type IdentityRead struct {
 	ID               primitive.ObjectID `json:"id" bson:"_id,omitempty"`
-	Digits           uint64             `json:"digits" bson:"digit,omitempty"`
+	Digits           uint64             `json:"digits" bson:"digits,omitempty"`
 	FirstName        string             `json:"first_name" bson:"first_name,omitempty"`
 	LastName         string             `json:"last_name" bson:"last_name,omitempty"`
 	Origin           OriginRead         `json:"origin" bson:"origin,omitempty"`
 	Residence        ResidenceRead      `json:"residence" bson:"residence,omitempty"`
 	Email            string             `json:"email" bson:"email,omitempty"`
-	Password         string             `json:"password" bson:"password"`
+	Password         string             `json:"password,omitempty" bson:"password"`
 	BirthCertificate string             `json:"birth_certificate" bson:"birth_certificate"`
 	NationalIdCard   string             `json:"national_id_card" bson:"national_id_card"`
 	VoterCard        string             `json:"voter_card" bson:"voter_card"`

@@ -68,7 +68,7 @@ func (handler GroupHandler) CreateGroup(ctx *gin.Context) {
 		)
 		return
 	}
-	
+
 	Group, err := handler.service.Create(ctx, utils.StructToMap(body))
 	if err != nil {
 		handler.logger.Error(err)

@@ -2,13 +2,14 @@ package config
 
 import (
 	"io/ioutil"
+	"time"
 
 	yaml "gopkg.in/yaml.v3"
 )
 
 const (
 	defaultServerPort    = 8080
-	defaultTokenDuration = "24h"
+	defaultTokenDuration = time.Hour
 	defaultLogFile       = "./logs/app.log"
 	defaultServerHost    = "0.0.0.0"
 )
@@ -30,10 +31,10 @@ type Config struct {
 	Server          Server
 	DBSource        string `yaml:"db_source"`
 	Database        Database
-	TokenSecretKey  string `yaml:"token_secret_key"`
-	TokenDuration   string `yaml:"token_duration"`
-	LogFile         string `yaml:"log_file"`
-	FileStoragePath string `yaml:"file_storage_path"`
+	TokenSecretKey  string        `yaml:"token_secret_key"`
+	TokenDuration   time.Duration `yaml:"token_duration"`
+	LogFile         string        `yaml:"log_file"`
+	FileStoragePath string        `yaml:"file_storage_path"`
 }
 
 // Validate validates the application configuration.

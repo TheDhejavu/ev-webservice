@@ -4,10 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/workspace/evoting/ev-webservice/internal/entity"
 	"github.com/workspace/evoting/ev-webservice/internal/utils"
+	"github.com/workspace/evoting/ev-webservice/pkg/log"
 	"github.com/workspace/evoting/ev-webservice/pkg/token"
 )
 
@@ -17,8 +20,25 @@ const (
 	authorizationPayloadKey = "authorization_payload"
 )
 
+type authMiddleware struct {
+	userService     entity.UserService
+	identityService entity.IdentityService
+	tokenMaker      token.Maker
+	logger          log.Logger
+}
+
+func NewAuthMiddleware(userService entity.UserService, identityService entity.IdentityService, tokenMaker token.Maker, logger log.Logger) entity.AuthMiddleware {
+	return &authMiddleware{userService, identityService, tokenMaker, logger}
+}
+
+// HasAdmin checks that user has an admin permission.
+func (m authMiddleware) isAdmin(user entity.User) bool {
+	m.logger.Info("Checking Role....")
+	return user.Role == "admin"
+}
+
 // AuthMiddleware creates a gin middleware for authorization
-func AuthMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
+func (m authMiddleware) AuthRequired(fn func(c *gin.Context)) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		authorizationHeader := ctx.GetHeader(authorizationHeaderKey)
 
@@ -43,13 +63,50 @@ func AuthMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
 		}
 
 		accessToken := fields[1]
-		payload, err := tokenMaker.VerifyToken(accessToken)
+		payload, err := m.tokenMaker.VerifyToken(accessToken)
 		if err != nil {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, utils.ErrorResponse(err))
 			return
 		}
 
+		if payload.Identity {
+			_, err = m.userService.GetByUsername(ctx, payload.Data)
+		} else {
+			digits, _ := strconv.ParseUint(payload.Data, 10, 64)
+			_, err = m.identityService.GetByDigits(ctx, digits)
+		}
+
+		if err != nil {
+			m.logger.Error("Authentication failed.")
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, utils.ErrorResponse(err))
+			return
+		}
+
 		ctx.Set(authorizationPayloadKey, payload)
+		ctx.Next()
+	}
+}
+
+// AuthMiddleware creates a gin middleware for admin authorization
+func (m authMiddleware) AdminRequired(fn func(c *gin.Context)) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var err error
+		authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+		if authPayload.Identity {
+
+		}
+		user, err := m.userService.GetByUsername(ctx, authPayload.Data)
+
+		if err != nil {
+			m.logger.Error("Authentication failed.")
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, utils.ErrorResponse(err))
+			return
+		}
+		if m.isAdmin(user) == false {
+			m.logger.Error("Unauthorized access.")
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, utils.ErrorResponse(err))
+			return
+		}
 		ctx.Next()
 	}
 }

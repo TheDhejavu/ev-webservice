@@ -19,6 +19,7 @@ type electionHandler struct {
 	service        entity.ElectionService
 	countryService entity.CountryService
 	partyService   entity.PoliticalPartyService
+	authMiddleware entity.AuthMiddleware
 	logger         log.Logger
 	v              *utils.CustomValidator
 }
@@ -29,17 +30,23 @@ func RegisterHandlers(
 	service entity.ElectionService,
 	countryService entity.CountryService,
 	partyService entity.PoliticalPartyService,
+	authMiddleware entity.AuthMiddleware,
 	logger log.Logger,
 ) {
 	handler := &electionHandler{
 		service:        service,
 		countryService: countryService,
 		partyService:   partyService,
+		authMiddleware: authMiddleware,
 		logger:         logger,
 		v:              utils.CustomValidators(),
 	}
 
-	router.GET("/elections", handler.GetElections)
+	router.GET("/elections",
+		authMiddleware.AuthRequired(
+			authMiddleware.AdminRequired(handler.GetElections),
+		),
+	)
 	router.POST("/elections", handler.CreateElection)
 	router.GET("/elections/:id", handler.GetElection)
 	router.DELETE("/elections/:id", handler.DeleteElection)

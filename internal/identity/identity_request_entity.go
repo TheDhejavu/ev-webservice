@@ -3,19 +3,21 @@ package identity
 import (
 	"context"
 	"mime/multipart"
+
+	validator "github.com/go-playground/validator/v10"
 )
 
 type createIdentityRequest struct {
 	FirstName string `form:"first_name" validate:"required"`
 	LastName  string `form:"last_name" validate:"required"`
 	Origin    struct {
-		Country string `form:"country" validate:"required"`
+		Country string `form:"country" validate:"required,not_exists"`
 		State   string `form:"state" validate:"required"`
 		City    string `form:"city" validate:"required"`
 		Address string `form:"address" validate:"required"`
 	} `form:"origin" validate:"required,dive"`
 	Residence struct {
-		Country string `form:"country" validate:"required"`
+		Country string `form:"country" validate:"required,not_exists"`
 		State   string `form:"state" validate:"required"`
 		City    string `form:"city" validate:"required"`
 		Address string `form:"address" validate:"required"`
@@ -28,6 +30,18 @@ type createIdentityRequest struct {
 }
 
 func (request createIdentityRequest) Validate(ctx context.Context, handler identityHandler) error {
+	handler.v.Validator.RegisterValidation("not_exists", func(fl validator.FieldLevel) bool {
+		fieldName := fl.FieldName()
+		if fieldName == "Country" {
+			value, _ := handler.countryService.IdExists(ctx, fl.Field().String())
+
+			if !value {
+				return false
+			}
+			return true
+		}
+		return true
+	})
 	err := handler.v.Validator.Struct(request)
 
 	return err
