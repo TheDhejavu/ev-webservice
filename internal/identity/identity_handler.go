@@ -20,12 +20,13 @@ import (
 
 // identityHandler   represent the httphandler for Identities
 type identityHandler struct {
-	service        entity.IdentityService
-	countryService entity.CountryService
-	authMiddleware entity.AuthMiddleware
-	logger         log.Logger
-	v              *utils.CustomValidator
-	conf           config.Config
+	service         entity.IdentityService
+	countryService  entity.CountryService
+	identityService entity.IdentityService
+	authMiddleware  entity.AuthMiddleware
+	logger          log.Logger
+	v               *utils.CustomValidator
+	conf            config.Config
 }
 
 // RegisterHandlers will initialize the Identities resources endpoint
@@ -33,17 +34,19 @@ func RegisterHandlers(
 	router *gin.RouterGroup,
 	service entity.IdentityService,
 	countryService entity.CountryService,
+	identityService entity.IdentityService,
 	authMiddleware entity.AuthMiddleware,
 	conf config.Config,
 	logger log.Logger,
 ) {
 	handler := &identityHandler{
-		service:        service,
-		countryService: countryService,
-		authMiddleware: authMiddleware,
-		logger:         logger,
-		conf:           conf,
-		v:              utils.CustomValidators(),
+		service:         service,
+		countryService:  countryService,
+		identityService: identityService,
+		authMiddleware:  authMiddleware,
+		logger:          logger,
+		conf:            conf,
+		v:               utils.CustomValidators(),
 	}
 
 	router.GET("/identity", handler.GetIdentities)
@@ -55,7 +58,6 @@ func RegisterHandlers(
 
 // CreateIdentity will create new Identities
 func (handler identityHandler) CreateIdentity(ctx *gin.Context) {
-
 	var body createIdentityRequest
 	if err := ctx.ShouldBind(&body); err != nil {
 		if errors.Is(err, io.EOF) {
@@ -108,7 +110,36 @@ func (handler identityHandler) CreateIdentity(ctx *gin.Context) {
 		}
 		identity[fileNames[i]] = fileName
 	}
-	Identity, err := handler.service.Create(ctx, identity)
+	// Multipart form
+	form, _ := ctx.MultipartForm()
+	facialImages := form.File["facial_images"]
+	facialImagesFiles := []string{}
+
+	for i := 0; i < len(facialImages); i++ {
+		file := facialImages[i]
+		if err != nil {
+			handler.logger.With(ctx).Error(err)
+			utils.GinErrorResponse(
+				ctx,
+				customErr.BadRequest(fmt.Sprintf("get form err: %s", err.Error())),
+			)
+		}
+		// cwd := os.Getwd()
+		ext := filepath.Ext(file.Filename)
+		fileName := fmt.Sprintf("%s_%s%s", utils.GenUUID(), body.FirstName, ext)
+		fileDestination := filepath.Join("tmp", fileName)
+		if err := ctx.SaveUploadedFile(file, fileDestination); err != nil {
+			handler.logger.With(ctx).Error(err)
+			utils.GinErrorResponse(
+				ctx,
+				customErr.BadRequest(fmt.Sprintf("upload file err: %s", err.Error())),
+			)
+			return
+		}
+		facialImagesFiles = append(facialImagesFiles, fileDestination)
+	}
+
+	Identity, err := handler.service.Create(ctx, identity, facialImagesFiles)
 	if err != nil {
 		handler.logger.Error(err)
 		utils.GinErrorResponse(

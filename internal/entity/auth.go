@@ -25,6 +25,6 @@ type AuthService interface {
 }
 
 type AuthMiddleware interface {
-	AuthRequired(fn func(ctx *gin.Context)) gin.HandlerFunc
-	AdminRequired(fn func(ctx *gin.Context)) gin.HandlerFunc
+	AuthRequired() gin.HandlerFunc
+	AdminRequired() gin.HandlerFunc
 }

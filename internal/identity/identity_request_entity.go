@@ -22,14 +22,28 @@ type createIdentityRequest struct {
 		City    string `form:"city" validate:"required"`
 		Address string `form:"address" validate:"required"`
 	} `form:"residence" validate:"required,dive"`
-	Email            string                `form:"email" validate:"required,email"`
-	Password         string                `form:"password" validate:"required"`
-	BirthCertificate *multipart.FileHeader `form:"birth_certificate" bson:"birth_certificate" validate:"required"`
-	NationalIdCard   *multipart.FileHeader `form:"national_id_card" bson:"national_id_card" validate:"required"`
-	VoterCard        *multipart.FileHeader `form:"voter_card" bson:"voter_card" validate:"required"`
+	Email            string                  `form:"email" validate:"required,email,exists"`
+	Password         string                  `form:"password" validate:"required"`
+	BirthCertificate *multipart.FileHeader   `form:"birth_certificate" bson:"birth_certificate" validate:"required"`
+	FacialImages     []*multipart.FileHeader `form:"facial_images" validate:"required"`
+	NationalIdCard   *multipart.FileHeader   `form:"national_id_card" validate:"required"`
+	VoterCard        *multipart.FileHeader   `form:"voter_card" validate:"required"`
 }
 
 func (request createIdentityRequest) Validate(ctx context.Context, handler identityHandler) error {
+	handler.v.Validator.RegisterValidation("exists", func(fl validator.FieldLevel) bool {
+		fieldName := fl.FieldName()
+		if fieldName == "Email" {
+			value, _ := handler.identityService.Exists(ctx, map[string]interface{}{
+				"email": fl.Field().String(),
+			}, nil)
+			if value {
+				return false
+			}
+			return true
+		}
+		return true
+	})
 	handler.v.Validator.RegisterValidation("not_exists", func(fl validator.FieldLevel) bool {
 		fieldName := fl.FieldName()
 		if fieldName == "Country" {

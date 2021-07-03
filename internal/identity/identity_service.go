@@ -6,6 +6,7 @@ import (
 
 	"github.com/workspace/evoting/ev-webservice/internal/entity"
 	crypto "github.com/workspace/evoting/ev-webservice/pkg/crypto"
+	"github.com/workspace/evoting/ev-webservice/pkg/facialrecognition"
 	"github.com/workspace/evoting/ev-webservice/pkg/log"
 )
 
@@ -57,7 +58,8 @@ func (service *identityService) Update(ctx context.Context, id string, data map[
 	}
 	return
 }
-func (service *identityService) Create(ctx context.Context, data map[string]interface{}) (res entity.IdentityRead, err error) {
+
+func (service *identityService) Create(ctx context.Context, data map[string]interface{}, images []string) (res entity.IdentityRead, err error) {
 	jsonbody, err := json.Marshal(data)
 	if err != nil {
 		return
@@ -74,6 +76,11 @@ func (service *identityService) Create(ctx context.Context, data map[string]inte
 		return
 	}
 	res, err = service.identityRepo.Create(ctx, *Identity)
+	if err != nil {
+		return
+	}
+	fg := facialrecognition.NewFacialRecogntion(service.logger)
+	err = fg.Register(res.ID.Hex(), images)
 	if err != nil {
 		return
 	}

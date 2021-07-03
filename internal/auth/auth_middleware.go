@@ -38,7 +38,7 @@ func (m authMiddleware) isAdmin(user entity.User) bool {
 }
 
 // AuthMiddleware creates a gin middleware for authorization
-func (m authMiddleware) AuthRequired(fn func(c *gin.Context)) gin.HandlerFunc {
+func (m authMiddleware) AuthRequired() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		authorizationHeader := ctx.GetHeader(authorizationHeaderKey)
 
@@ -69,7 +69,7 @@ func (m authMiddleware) AuthRequired(fn func(c *gin.Context)) gin.HandlerFunc {
 			return
 		}
 
-		if payload.Identity {
+		if payload.Identity == false {
 			_, err = m.userService.GetByUsername(ctx, payload.Data)
 		} else {
 			digits, _ := strconv.ParseUint(payload.Data, 10, 64)
@@ -78,22 +78,28 @@ func (m authMiddleware) AuthRequired(fn func(c *gin.Context)) gin.HandlerFunc {
 
 		if err != nil {
 			m.logger.Error("Authentication failed.")
+			err = errors.New("Unauthorized Access.")
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, utils.ErrorResponse(err))
 			return
 		}
 
 		ctx.Set(authorizationPayloadKey, payload)
-		ctx.Next()
+
+		return
 	}
 }
 
 // AuthMiddleware creates a gin middleware for admin authorization
-func (m authMiddleware) AdminRequired(fn func(c *gin.Context)) gin.HandlerFunc {
+func (m authMiddleware) AdminRequired() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var err error
 		authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
-		if authPayload.Identity {
 
+		if authPayload.Identity {
+			m.logger.Error("Authentication failed.")
+			err = errors.New("Unauthorized Access.")
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, utils.ErrorResponse(err))
+			return
 		}
 		user, err := m.userService.GetByUsername(ctx, authPayload.Data)
 
@@ -107,6 +113,7 @@ func (m authMiddleware) AdminRequired(fn func(c *gin.Context)) gin.HandlerFunc {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, utils.ErrorResponse(err))
 			return
 		}
-		ctx.Next()
+
+		return
 	}
 }

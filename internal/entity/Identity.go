@@ -74,7 +74,7 @@ type IdentityService interface {
 	GetByEmail(ctx context.Context, email string) (IdentityRead, error)
 	Exists(ctx context.Context, filter map[string]interface{}, exclude map[string]interface{}) (bool, error)
 	Update(ctx context.Context, id string, data map[string]interface{}) (IdentityRead, error)
-	Create(ctx context.Context, identity map[string]interface{}) (IdentityRead, error)
+	Create(ctx context.Context, identity map[string]interface{}, imageTmpPaths []string) (IdentityRead, error)
 	Delete(ctx context.Context, id string) error
 }
 

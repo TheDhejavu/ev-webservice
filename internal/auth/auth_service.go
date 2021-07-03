@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/workspace/evoting/ev-webservice/internal/config"
 	"github.com/workspace/evoting/ev-webservice/internal/entity"
@@ -25,12 +26,14 @@ func NewIdentityService(
 	identityService entity.IdentityService,
 	userService entity.UserService,
 	logger log.Logger,
+	config config.Config,
 	tokenMaker token.Maker,
 ) entity.AuthService {
 	return authService{
 		identityService: identityService,
 		userService:     userService,
 		tokenMaker:      tokenMaker,
+		config:          config,
 		logger:          logger,
 	}
 }
@@ -52,6 +55,7 @@ func (s authService) Login(ctx context.Context, username, password string) (enti
 		return authUser, entity.ErrInvalidUser
 	}
 
+	fmt.Println(s.config.TokenDuration)
 	accessToken, err := s.tokenMaker.CreateToken(
 		user.Username,
 		false,
@@ -85,7 +89,7 @@ func (s authService) LoginIdentity(ctx context.Context, digits uint64, password 
 	}
 
 	accessToken, err := s.tokenMaker.CreateToken(
-		fmt.Sprintf("%o", identity.Digits),
+		strconv.Itoa(int(identity.Digits)),
 		true,
 		s.config.TokenDuration,
 	)

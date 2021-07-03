@@ -36,8 +36,8 @@ func RegisterHandlers(
 }
 
 type loginUser struct {
-	Username string `json:"username" binding:"required,alphanum"`
-	Password string `json:"password" binding:"required"`
+	Username string `json:"username" validate:"required,alphanum"`
+	Password string `json:"password" validate:"required"`
 }
 
 // login returns a handler that handles user login request.
@@ -91,8 +91,8 @@ func (handler AuthHandler) Login(ctx *gin.Context) {
 }
 
 type loginIdentity struct {
-	Digits   uint64 `json:"digits" binding:"required"`
-	Password string `json:"password" binding:"required"`
+	Digits   uint64 `json:"digits" validate:"required"`
+	Password string `json:"password" validate:"required"`
 }
 
 // LoginIdentity Log in to user identity

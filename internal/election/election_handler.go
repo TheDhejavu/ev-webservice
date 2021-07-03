@@ -43,14 +43,27 @@ func RegisterHandlers(
 	}
 
 	router.GET("/elections",
-		authMiddleware.AuthRequired(
-			authMiddleware.AdminRequired(handler.GetElections),
-		),
+		authMiddleware.AuthRequired(),
+		handler.GetElections,
 	)
-	router.POST("/elections", handler.CreateElection)
-	router.GET("/elections/:id", handler.GetElection)
-	router.DELETE("/elections/:id", handler.DeleteElection)
-	router.PUT("/elections/:id", handler.UpdateElection)
+	router.POST("/elections",
+		authMiddleware.AuthRequired(),
+		authMiddleware.AdminRequired(),
+		handler.CreateElection,
+	)
+	router.GET("/elections/:id",
+		handler.GetElection,
+	)
+	router.DELETE("/elections/:id",
+		authMiddleware.AuthRequired(),
+		authMiddleware.AdminRequired(),
+		handler.DeleteElection,
+	)
+	router.PUT("/elections/:id",
+		authMiddleware.AuthRequired(),
+		authMiddleware.AdminRequired(),
+		handler.UpdateElection,
+	)
 }
 
 // CreateElection will create new Elections
@@ -98,7 +111,7 @@ func (handler electionHandler) CreateElection(ctx *gin.Context) {
 // GetElections gets all Elections
 func (handler *electionHandler) GetElections(ctx *gin.Context) {
 
-	handler.logger.Info("get elections")
+	handler.logger.Info("get electionsssssssssssssssssssssss")
 	result, err := handler.service.Fetch(ctx, nil)
 	if err != nil {
 		handler.logger.Error(err)
@@ -106,7 +119,6 @@ func (handler *electionHandler) GetElections(ctx *gin.Context) {
 			ctx,
 			customErr.InternalServerError(err.Error()),
 		)
-		return
 	}
 
 	handler.logger.Info(result)

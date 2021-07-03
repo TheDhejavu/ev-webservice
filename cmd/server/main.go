@@ -41,7 +41,7 @@ var (
 
 // NewServer creates a new HTTP server and set up routing.
 func NewServer(db *mongo.Database, config *config.Config, logger log.Logger) (*Server, error) {
-	tokenMaker, err := token.NewJWTMaker(config.TokenSecretKey)
+	tokenMaker, err := token.NewPasetoMaker(config.TokenSecretKey)
 	if err != nil {
 		return nil, fmt.Errorf("Could not create token maker instance: %w", err)
 	}
@@ -119,6 +119,7 @@ func (server *Server) buildHandler() {
 		v1,
 		identityService,
 		countryService,
+		identityService,
 		authMiddleware,
 		server.config,
 		server.logger,
@@ -131,6 +132,7 @@ func (server *Server) buildHandler() {
 			identityService,
 			userService,
 			server.logger,
+			server.config,
 			server.tokenMaker,
 		),
 		server.logger,

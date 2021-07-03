@@ -5989,3 +5989,647 @@ Key: 'createIdentityRequest.Email' Error:Field validation for 'Email' failed on 
 [34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
 [34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
 [34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_handler.go:50	Key: 'loginUser.Password' Error:Field validation for 'Password' failed on the 'required' tag	{"request_id": "74129b53-8bef-494e-9aa0-3405387b9725"}
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_handler.go:60	Key: 'loginUser.Password' Error:Field validation for 'Password' failed on the 'required' tag
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_middleware.go:80	Authentication failed.
+[31mERROR[0m	auth/auth_middleware.go:80	Authentication failed.
+[31mERROR[0m	auth/auth_middleware.go:80	Authentication failed.
+[31mERROR[0m	auth/auth_middleware.go:80	Authentication failed.
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:246	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_middleware.go:80	Authentication failed.
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_middleware.go:80	Authentication failed.
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_middleware.go:80	Authentication failed.
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	election/election_handler.go:99	get elections
+[34mINFO[0m	election/election_handler.go:110	[]
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	auth/auth_middleware.go:36	Checking Role....
+[34mINFO[0m	election/election_handler.go:101	get elections
+[34mINFO[0m	election/election_handler.go:112	[]
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	election/election_handler.go:102	get elections
+[34mINFO[0m	election/election_handler.go:113	[]
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	election/election_handler.go:102	get elections
+[34mINFO[0m	election/election_handler.go:113	[]
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	election/election_handler.go:102	get electionsssssssssssssssssssssss
+[34mINFO[0m	election/election_handler.go:113	[]
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_middleware.go:94	Unauthorized access.
+[34mINFO[0m	auth/auth_middleware.go:36	Checking Role....
+[31mERROR[0m	auth/auth_middleware.go:108	Unauthorized access.
+[31mERROR[0m	auth/auth_middleware.go:94	Unauthorized access.
+[34mINFO[0m	auth/auth_middleware.go:36	Checking Role....
+[31mERROR[0m	auth/auth_middleware.go:108	Unauthorized access.
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	auth/auth_middleware.go:36	Checking Role....
+[34mINFO[0m	election/election_handler.go:101	get electionsssssssssssssssssssssss
+[34mINFO[0m	election/election_handler.go:111	[]
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_middleware.go:80	Authentication failed.
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_middleware.go:80	Authentication failed.
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_middleware.go:80	Authentication failed.
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_middleware.go:80	Authentication failed.
+[31mERROR[0m	auth/auth_middleware.go:80	Authentication failed.
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_middleware.go:80	Authentication failed.
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_middleware.go:80	Authentication failed.
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_middleware.go:80	Authentication failed.
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	auth/auth_middleware.go:98	Authentication failed.
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	politicalparty/party_repo.go:278	Delete transaction error: encoding/hex: invalid byte: U+006D 'm'
+[31mERROR[0m	politicalparty/party_handler.go:207	encoding/hex: invalid byte: U+006D 'm'
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	identity/identity_handler.go:74	Key: 'createIdentityRequest.FacialImages' Error:Field validation for 'FacialImages' failed on the 'required' tag
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	identity/identity_handler.go:74	Key: 'createIdentityRequest.FacialImages' Error:Field validation for 'FacialImages' failed on the 'required' tag
+[31mERROR[0m	identity/identity_handler.go:74	Key: 'createIdentityRequest.FacialImages' Error:Field validation for 'FacialImages' failed on the 'required' tag
+[31mERROR[0m	identity/identity_handler.go:74	Key: 'createIdentityRequest.FacialImages' Error:Field validation for 'FacialImages' failed on the 'required' tag
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	identity/identity_handler.go:74	Key: 'createIdentityRequest.FacialImages' Error:Field validation for 'FacialImages' failed on the 'required' tag
+[31mERROR[0m	identity/identity_handler.go:74	Key: 'createIdentityRequest.FacialImages' Error:Field validation for 'FacialImages' failed on the 'required' tag
+[31mERROR[0m	identity/identity_handler.go:74	Key: 'createIdentityRequest.FacialImages' Error:Field validation for 'FacialImages' failed on the 'required' tag
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	facialrecognition/facial.go:123	Register facial status code:200
+[34mINFO[0m	facialrecognition/facial.go:124	Register facial header:map[Content-Length:[153] Content-Type:[application/json] Date:[Sat, 03 Jul 2021 06:31:36 GMT] Server:[uvicorn]]
+[34mINFO[0m	facialrecognition/facial.go:126	Register facial body{"filenames":["49a058f4-6f39-4dd2-aa35-3552c6f5a27b_Akinola.png","2dbdf04c-679c-4797-a934-423d84866d2a_Akinola.png"],"message":"registered successfully"}
+[34mINFO[0m	facialrecognition/facial.go:123	Register facial status code:200
+[34mINFO[0m	facialrecognition/facial.go:124	Register facial header:map[Content-Length:[153] Content-Type:[application/json] Date:[Sat, 03 Jul 2021 06:32:58 GMT] Server:[uvicorn]]
+[34mINFO[0m	facialrecognition/facial.go:126	Register facial body{"filenames":["bf2f97a9-cfff-49d5-9af0-27272379e353_Akinola.png","cf3cad37-7a71-4a2d-a289-4722b51ba35d_Akinola.png"],"message":"registered successfully"}
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	facialrecognition/facial.go:129	Register facial status code:200
+[34mINFO[0m	facialrecognition/facial.go:130	Register facial header:map[Content-Length:[153] Content-Type:[application/json] Date:[Sat, 03 Jul 2021 06:37:01 GMT] Server:[uvicorn]]
+[34mINFO[0m	facialrecognition/facial.go:132	Register facial body{"filenames":["5cf5a1b7-4b21-4da0-acfe-c196c1417a20_Akinola.png","0243b80d-30cf-4698-8679-f263f7655968_Akinola.png"],"message":"registered successfully"}
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:247	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:250	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:248	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:251	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:248	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:251	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:248	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:251	listen tcp 0.0.0.0:8080: bind: address already in use
+[34mINFO[0m	server/main.go:248	server  is running at 0.0.0.0:8080
+[34mINFO[0m	facialrecognition/facial.go:129	Register facial status code:200
+[34mINFO[0m	facialrecognition/facial.go:130	Register facial header:map[Content-Length:[153] Content-Type:[application/json] Date:[Sat, 03 Jul 2021 06:38:31 GMT] Server:[uvicorn]]
+[34mINFO[0m	facialrecognition/facial.go:132	Register facial body{"filenames":["47cf1bc3-7644-4a74-b31f-bf9bfefc4425_Akinola.png","67fab5aa-7fc0-490a-98cb-de0e2aaa15b8_Akinola.png"],"message":"registered successfully"}
+[34mINFO[0m	facialrecognition/facial.go:129	Register facial status code:200
+[34mINFO[0m	facialrecognition/facial.go:130	Register facial header:map[Content-Length:[153] Content-Type:[application/json] Date:[Sat, 03 Jul 2021 06:41:15 GMT] Server:[uvicorn]]
+[34mINFO[0m	facialrecognition/facial.go:132	Register facial body{"filenames":["1fd82257-66fb-49ce-9d82-7e76186fea7f_Akinola.png","d570abfb-7392-4058-98fa-2cc498383cb0_Akinola.png"],"message":"registered successfully"}
+[34mINFO[0m	facialrecognition/facial.go:129	Register facial status code:200
+[34mINFO[0m	facialrecognition/facial.go:130	Register facial header:map[Content-Length:[153] Content-Type:[application/json] Date:[Sat, 03 Jul 2021 06:42:47 GMT] Server:[uvicorn]]
+[34mINFO[0m	facialrecognition/facial.go:132	Register facial body{"filenames":["c1cf2d49-3d1b-4772-b8fb-157cc2593660_Akinola.png","85c2212f-64b9-40e0-b5ff-b1b1a9253b77_Akinola.png"],"message":"registered successfully"}
+[34mINFO[0m	facialrecognition/facial.go:129	Register facial status code:200
+[34mINFO[0m	facialrecognition/facial.go:130	Register facial header:map[Content-Length:[153] Content-Type:[application/json] Date:[Sat, 03 Jul 2021 06:43:27 GMT] Server:[uvicorn]]
+[34mINFO[0m	facialrecognition/facial.go:132	Register facial body{"filenames":["4cfa9809-0f23-4904-b0f0-0a999aa2e7f3_Akinola.png","57e8da91-d030-45e2-9750-586ee23765ad_Akinola.png"],"message":"registered successfully"}
+[34mINFO[0m	facialrecognition/facial.go:129	Register facial status code:200
+[34mINFO[0m	facialrecognition/facial.go:130	Register facial header:map[Content-Length:[153] Content-Type:[application/json] Date:[Sat, 03 Jul 2021 06:44:55 GMT] Server:[uvicorn]]
+[34mINFO[0m	facialrecognition/facial.go:132	Register facial body{"filenames":["084b550d-b83c-4b25-9801-adf4ed75f697_Akinola.png","a6a55c2f-d498-4107-b4c1-cfd9b79e3e8d_Akinola.png"],"message":"registered successfully"}
+[34mINFO[0m	server/main.go:248	server  is running at 0.0.0.0:8080
+[34mINFO[0m	server/main.go:248	server  is running at 0.0.0.0:8080
+[31mERROR[0m	server/main.go:251	listen tcp 0.0.0.0:8080: bind: address already in use
+[31mERROR[0m	identity/identity_handler.go:77	Key: 'createIdentityRequest.Email' Error:Field validation for 'Email' failed on the 'exists' tag
+[34mINFO[0m	server/main.go:248	server  is running at 0.0.0.0:8080
