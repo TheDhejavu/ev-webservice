@@ -1,8 +1,6 @@
 package main
 
 import (
-	"crypto/x509"
-	"encoding/pem"
 	"fmt"
 
 	"github.com/workspace/evoting/ev-webservice/wallet"
@@ -14,25 +12,16 @@ func main() {
 		panic(err)
 	}
 
-	// id := wallets.AddWallet("y")
-	// wallets.SaveFile()
-	w, _ := wallets.GetWallet("y")
-	x509EncodedPub, _ := x509.MarshalPKIXPublicKey(&w.Main.PrivateKey.PublicKey)
-	pemEncodedMainPub := pem.EncodeToMemory(
-		&pem.Block{
-			Type:  "PUBLIC KEY",
-			Bytes: x509EncodedPub,
-		})
+	id := wallets.AddWallet("y")
+	wallets.Save()
+	w, _ := wallets.GetWallet(id)
 
-	x509EncodedPub, _ = x509.MarshalPKIXPublicKey(&w.Main.PrivateKey.PublicKey)
-	pemEncodedViewPub := pem.EncodeToMemory(&pem.Block{
-		Type:  "PUBLIC KEY",
-		Bytes: w.Main.PublicKey,
-	})
-
-	// return string(pemEncoded), string(pemEncodedPub)
-	fmt.Println(string(pemEncodedViewPub), string(pemEncodedMainPub))
 	fmt.Println(string(w.Certificate[:]))
+	fmt.Println(string(wallet.Base58Encode(w.Main.PublicKey)))
+	fmt.Println(w.View.PublicKey)
+	x := string(wallet.Base58Encode(w.View.PublicKey))
+	fmt.Println(x)
+	fmt.Println(wallet.Base58Decode([]byte(x)))
 }
 
 // -----BEGIN CERTIFICATE-----

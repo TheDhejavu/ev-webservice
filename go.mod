@@ -4,11 +4,15 @@ go 1.15
 
 require (
 	github.com/aead/chacha20poly1305 v0.0.0-20201124145622-1a5aba2a8b29
+	github.com/bmhatfield/go-runtime-metrics v0.0.0-20160512180836-3af15b63454c
 	github.com/chilts/sid v0.0.0-20190607042430-660e94789ec9
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fatih/structs v1.1.0
+	github.com/gin-contrib/cors v1.3.1 // indirect
 	github.com/gin-contrib/requestid v0.0.1
+	github.com/gin-gonic/contrib v0.0.0-20201101042839-6a891bf89f19
 	github.com/gin-gonic/gin v1.7.2
+	github.com/go-echarts/statsview v0.3.4
 	github.com/go-ozzo/ozzo-routing v2.1.4+incompatible
 	github.com/go-ozzo/ozzo-routing/v2 v2.3.0
 	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
@@ -26,9 +30,15 @@ require (
 	github.com/lithammer/shortuuid v3.0.0+incompatible
 	github.com/mattn/go-colorable v0.1.8
 	github.com/modern-go/reflect2 v1.0.1 // indirect
+	github.com/mr-tron/base58 v1.2.0
 	github.com/natefinch/lumberjack v2.0.0+incompatible
+	github.com/newrelic/go-agent v3.13.0+incompatible
+	github.com/newrelic/go-agent/v3 v3.13.0 // indirect
 	github.com/o1egl/paseto v1.0.0
 	github.com/oklog/ulid v1.3.1
+	github.com/peterbourgon/g2s v0.0.0-20170223122336-d4e7ad98afea // indirect
+	github.com/prometheus/client_golang v1.11.0
+	github.com/rs/cors v1.7.0
 	github.com/rs/xid v1.3.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/segmentio/ksuid v1.0.3

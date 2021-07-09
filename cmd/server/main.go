@@ -9,7 +9,12 @@ import (
 	"time"
 
 	"github.com/gin-contrib/requestid"
+	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/go-echarts/statsview"
+	newrelic "github.com/newrelic/go-agent"
+	"github.com/newrelic/go-agent/_integrations/nrgin/v1"
+
 	"github.com/workspace/evoting/ev-webservice/internal/auth"
 	"github.com/workspace/evoting/ev-webservice/internal/config"
 	"github.com/workspace/evoting/ev-webservice/internal/consensusgroup"
@@ -34,10 +39,45 @@ type Server struct {
 	config     config.Config
 	logger     log.Logger
 }
+type key int
+
+const keyNrID key = iota
 
 var (
+	nrapp      newrelic.Application
 	flagConfig = flag.String("config", "./config/local.yml", "path to the config file")
 )
+
+func initNewRelic(conf *config.Config) {
+	var err error
+	nrConfig := newrelic.NewConfig("app", conf.NewrelicKey)
+	nrapp, err = newrelic.NewApplication(nrConfig)
+	if err != nil {
+		panic("Failed to setup NewRelic: " + err.Error())
+	}
+}
+
+//populateNewRelicInContext get the request context populated
+func setNewRelicInContext() gin.HandlerFunc {
+
+	return func(c *gin.Context) {
+		//Setup context
+		ctx := c.Request.Context()
+
+		//Set newrelic context
+		var txn newrelic.Transaction
+		//newRelicTransaction is the key populated by nrgin Middleware
+		value, exists := c.Get("newRelicTransaction")
+		if exists {
+			if v, ok := value.(newrelic.Transaction); ok {
+				txn = v
+			}
+			ctx = context.WithValue(ctx, keyNrID, txn)
+		}
+		c.Request = c.Request.WithContext(ctx)
+		c.Next()
+	}
+}
 
 // NewServer creates a new HTTP server and set up routing.
 func NewServer(db *mongo.Database, config *config.Config, logger log.Logger) (*Server, error) {
@@ -53,9 +93,28 @@ func NewServer(db *mongo.Database, config *config.Config, logger log.Logger) (*S
 		logger:     logger,
 	}
 	router := gin.Default()
+	router.Use(static.Serve("/assets", static.LocalFile("storage", false)))
+
+	router.Use(func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	})
 
 	// // Set a lower memory limit for multipart forms (default is 32 MiB)
 	// router.MaxMultipartMemory = 8 << 20 // 8 MiB
+	initNewRelic(config)
+
+	router.Use(nrgin.Middleware(nrapp))
+	router.Use(setNewRelicInContext())
 
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{"API": "Web service"})
@@ -104,7 +163,7 @@ func (server *Server) buildHandler() {
 
 	//Register identity handlers
 	identityService := identity.NewIdentityService(
-		identity.NewMongoIdentityRepository(server.db, server.logger),
+		identity.NewMongoIdentityRepository(server.db, server.logger, server.config),
 		server.logger,
 	)
 
@@ -246,6 +305,11 @@ func main() {
 	address := fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port)
 
 	logger.Infof("server %v is running at %v", cfg.Version, address)
+
+	mgr := statsview.New()
+
+	// Start() runs a HTTP server at `localhost:18066` by default.
+	go mgr.Start()
 	err = server.Start(address)
 	if err != nil {
 		logger.Error(err)

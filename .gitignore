@@ -25,3 +25,4 @@ storage/
 .pid
 
 /tmp
+/wallet/db/

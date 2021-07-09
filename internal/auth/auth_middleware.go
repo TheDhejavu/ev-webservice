@@ -117,3 +117,8 @@ func (m authMiddleware) AdminRequired() gin.HandlerFunc {
 		return
 	}
 }
+
+func (m authMiddleware) GetUser(ctx *gin.Context) *token.Payload {
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	return authPayload
+}

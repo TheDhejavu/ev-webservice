@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/workspace/evoting/ev-webservice/internal/entity"
@@ -91,7 +92,7 @@ func (handler AuthHandler) Login(ctx *gin.Context) {
 }
 
 type loginIdentity struct {
-	Digits   uint64 `json:"digits" validate:"required"`
+	Digits   string `json:"digits" validate:"required"`
 	Password string `json:"password" validate:"required"`
 }
 
@@ -119,8 +120,8 @@ func (handler AuthHandler) LoginIdentity(ctx *gin.Context) {
 		)
 		return
 	}
-
-	identity, err := handler.service.LoginIdentity(ctx, body.Digits, body.Password)
+	digits, _ := strconv.ParseUint(body.Digits, 10, 64)
+	identity, err := handler.service.LoginIdentity(ctx, digits, body.Password)
 	if err != nil {
 		switch err {
 		case entity.ErrInvalidIdentity:

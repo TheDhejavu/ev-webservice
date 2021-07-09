@@ -8,18 +8,38 @@ import (
 	crypto "github.com/workspace/evoting/ev-webservice/pkg/crypto"
 	"github.com/workspace/evoting/ev-webservice/pkg/facialrecognition"
 	"github.com/workspace/evoting/ev-webservice/pkg/log"
+	"github.com/workspace/evoting/ev-webservice/wallet"
 )
 
 type identityService struct {
 	identityRepo entity.IdentityRepository
+	wallets      *wallet.Wallets
 	logger       log.Logger
 }
 
 func NewIdentityService(identityRepo entity.IdentityRepository, logger log.Logger) entity.IdentityService {
+	// Initialize system identity wallet
+	wallets, _ := wallet.InitializeWallets()
+
 	return &identityService{
 		identityRepo: identityRepo,
+		wallets:      wallets,
 		logger:       logger,
 	}
+}
+
+func (service *identityService) populateKeys(identity *entity.IdentityRead) (err error) {
+	w, err := service.wallets.GetWallet(identity.ID.Hex())
+
+	if err != nil {
+		return
+	}
+
+	identity.Wallet.Certificate = string(w.Certificate[:])
+	identity.Wallet.PublicMainKey = string(wallet.Base58Encode(w.Main.PublicKey))
+	identity.Wallet.PublicViewKey = string(wallet.Base58Encode(w.View.PublicKey))
+
+	return nil
 }
 
 func (service *identityService) Fetch(ctx context.Context, filter interface{}) (res []entity.IdentityRead, err error) {
@@ -31,6 +51,10 @@ func (service *identityService) Fetch(ctx context.Context, filter interface{}) (
 }
 func (service *identityService) GetByID(ctx context.Context, id string) (res entity.IdentityRead, err error) {
 	res, err = service.identityRepo.GetByID(ctx, id)
+	if err != nil {
+		return
+	}
+	err = service.populateKeys(&res)
 	if err != nil {
 		return
 	}
@@ -46,6 +70,12 @@ func (service *identityService) GetByEmail(ctx context.Context, email string) (r
 }
 func (service *identityService) GetByDigits(ctx context.Context, id uint64) (res entity.IdentityRead, err error) {
 	res, err = service.identityRepo.GetByDigits(ctx, id)
+
+	if err != nil {
+		return
+	}
+	err = service.populateKeys(&res)
+
 	if err != nil {
 		return
 	}
@@ -59,7 +89,7 @@ func (service *identityService) Update(ctx context.Context, id string, data map[
 	return
 }
 
-func (service *identityService) Create(ctx context.Context, data map[string]interface{}, images []string) (res entity.IdentityRead, err error) {
+func (service *identityService) Create(ctx context.Context, data map[string]interface{}, facialImages []string) (res entity.IdentityRead, err error) {
 	jsonbody, err := json.Marshal(data)
 	if err != nil {
 		return
@@ -69,18 +99,29 @@ func (service *identityService) Create(ctx context.Context, data map[string]inte
 	if err = json.Unmarshal(jsonbody, &Identity); err != nil {
 		return
 	}
+	// Hash user password
 	hashedPassword, err := crypto.HashPassword(Identity.Password)
 	Identity.Password = hashedPassword
 
 	if err != nil {
 		return
 	}
+	// Add new identity to the underlying data layer
 	res, err = service.identityRepo.Create(ctx, *Identity)
 	if err != nil {
 		return
 	}
+	// Register Captured facial images of the user
 	fg := facialrecognition.NewFacialRecogntion(service.logger)
-	err = fg.Register(res.ID.Hex(), images)
+	err = fg.Register(res.ID.Hex(), facialImages)
+	if err != nil {
+		return
+	}
+
+	// Add new identity to the wallet with the User ID
+	service.wallets.AddWallet(res.ID.Hex())
+	service.wallets.Save()
+	err = service.populateKeys(&res)
 	if err != nil {
 		return
 	}

@@ -33,6 +33,7 @@ type Origin struct {
 type Residence struct {
 	Country primitive.ObjectID `json:"country" bson:"country,omitempty"`
 	City    string             `json:"city" bson:"city,omitempty"`
+	State   string             `json:"state" bson:"state,omitempty"`
 	Address string             `json:"address" bson:"address,omitempty"`
 }
 
@@ -49,8 +50,13 @@ type IdentityRead struct {
 	BirthCertificate string             `json:"birth_certificate" bson:"birth_certificate"`
 	NationalIdCard   string             `json:"national_id_card" bson:"national_id_card"`
 	VoterCard        string             `json:"voter_card" bson:"voter_card"`
-	UpdatedAt        time.Time          `json:"updated_at" bson:"updated_at,omitempty"`
-	CreatedAt        time.Time          `json:"created_at" bson:"created_at,omitempty"`
+	Wallet           struct {
+		PublicMainKey string `json:"public_main_key"`
+		PublicViewKey string `json:"public_view_key"`
+		Certificate   string `json:"certificate"`
+	} `json:"wallet"`
+	UpdatedAt time.Time `json:"updated_at" bson:"updated_at,omitempty"`
+	CreatedAt time.Time `json:"created_at" bson:"created_at,omitempty"`
 }
 
 type OriginRead struct {
@@ -63,6 +69,7 @@ type OriginRead struct {
 type ResidenceRead struct {
 	Country Country `json:"country" bson:"country,omitempty"`
 	City    string  `json:"city" bson:"city,omitempty"`
+	State   string  `json:"state" bson:"state,omitempty"`
 	Address string  `json:"address" bson:"address,omitempty"`
 }
 

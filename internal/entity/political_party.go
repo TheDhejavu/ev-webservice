@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+//PoliticalParty represent the PoliticalParty entity
 type PoliticalParty struct {
 	ID        primitive.ObjectID `json:"id" bson:"_id,omitempty"`
 	Name      string             `json:"name" bson:"name,omitempty"`

@@ -110,9 +110,12 @@ func (handler electionHandler) CreateElection(ctx *gin.Context) {
 
 // GetElections gets all Elections
 func (handler *electionHandler) GetElections(ctx *gin.Context) {
+	var result []entity.ElectionRead
+	var err error
 
-	handler.logger.Info("get electionsssssssssssssssssssssss")
-	result, err := handler.service.Fetch(ctx, nil)
+	_ = handler.authMiddleware.GetUser(ctx)
+
+	result, err = handler.service.Fetch(ctx, nil)
 	if err != nil {
 		handler.logger.Error(err)
 		utils.GinErrorResponse(

@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"errors"
-	"fmt"
 	"strconv"
 
 	"github.com/workspace/evoting/ev-webservice/internal/config"
@@ -38,6 +37,7 @@ func NewIdentityService(
 	}
 }
 
+// Login handles user login
 func (s authService) Login(ctx context.Context, username, password string) (entity.AuthUser, error) {
 	user, err := s.userService.GetByUsername(ctx, username)
 	authUser := entity.AuthUser{}
@@ -55,7 +55,6 @@ func (s authService) Login(ctx context.Context, username, password string) (enti
 		return authUser, entity.ErrInvalidUser
 	}
 
-	fmt.Println(s.config.TokenDuration)
 	accessToken, err := s.tokenMaker.CreateToken(
 		user.Username,
 		false,

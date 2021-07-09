@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"path/filepath"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 
@@ -15,7 +16,6 @@ import (
 
 	customErr "github.com/workspace/evoting/ev-webservice/internal/errors"
 	"github.com/workspace/evoting/ev-webservice/pkg/log"
-	"github.com/workspace/evoting/ev-webservice/pkg/token"
 )
 
 // identityHandler   represent the httphandler for Identities
@@ -51,6 +51,10 @@ func RegisterHandlers(
 
 	router.GET("/identity", handler.GetIdentities)
 	router.POST("/identity", handler.CreateIdentity)
+	router.GET("/identity/me",
+		authMiddleware.AuthRequired(),
+		handler.GetCurrentIdentity,
+	)
 	router.GET("/identity/:id", handler.GetIdentity)
 	router.DELETE("/identity/:id", handler.DeleteIdentity)
 	router.PUT("/identity/:id", handler.UpdateIdentity)
@@ -60,14 +64,16 @@ func RegisterHandlers(
 func (handler identityHandler) CreateIdentity(ctx *gin.Context) {
 	var body createIdentityRequest
 	if err := ctx.ShouldBind(&body); err != nil {
+		fmt.Println(err)
 		if errors.Is(err, io.EOF) {
 			err = errors.New("Please Provide a valid Identity information")
 		}
 
+		message := "Please provide a valid information"
 		handler.logger.With(ctx).Error(err)
 		utils.GinErrorResponse(
 			ctx,
-			customErr.BadRequest(err.Error()),
+			customErr.BadRequest(message),
 		)
 		return
 	}
@@ -175,6 +181,35 @@ func (handler *identityHandler) GetIdentities(ctx *gin.Context) {
 	})
 }
 
+// GetCurrentIdentity get current loggedin identity
+func (handler identityHandler) GetCurrentIdentity(ctx *gin.Context) {
+	identity := handler.authMiddleware.GetUser(ctx)
+	print(identity.Data)
+	digits, _ := strconv.ParseUint(identity.Data, 0, 64)
+	result, err := handler.service.GetByDigits(ctx, digits)
+
+	if err != nil {
+		handler.logger.Error(err)
+		switch err {
+		case entity.ErrNotFound:
+			utils.GinErrorResponse(
+				ctx,
+				customErr.NotFound("Identity with provided ID does not exist"),
+			)
+			return
+		default:
+			utils.GinErrorResponse(
+				ctx,
+				customErr.InternalServerError(err.Error()),
+			)
+			return
+		}
+	}
+
+	handler.logger.Info(result)
+	ctx.JSON(http.StatusOK, gin.H{"data": result})
+}
+
 // GetIdentity get a Identity with specified ID
 func (handler identityHandler) GetIdentity(ctx *gin.Context) {
 	var params requestParams
@@ -188,8 +223,7 @@ func (handler identityHandler) GetIdentity(ctx *gin.Context) {
 	}
 
 	result, err := handler.service.GetByID(ctx, params.Id)
-	authPayload := ctx.MustGet("authorization_payload").(*token.Payload)
-	fmt.Println(authPayload)
+
 	if err != nil {
 		handler.logger.Error(err)
 		switch err {

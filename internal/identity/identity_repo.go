@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/workspace/evoting/ev-webservice/internal/config"
 	"github.com/workspace/evoting/ev-webservice/internal/entity"
 	"github.com/workspace/evoting/ev-webservice/internal/utils"
 	"github.com/workspace/evoting/ev-webservice/pkg/log"
@@ -17,13 +18,14 @@ import (
 type mongoIdentityRepository struct {
 	Collection *mongo.Collection
 	logger     log.Logger
+	config     config.Config
 }
 
 // NewmongoIdentityRepository creates a new Identity repository.
-func NewMongoIdentityRepository(db *mongo.Database, logger log.Logger) entity.IdentityRepository {
+func NewMongoIdentityRepository(db *mongo.Database, logger log.Logger, config config.Config) entity.IdentityRepository {
 
 	collection := db.Collection("identities")
-	return &mongoIdentityRepository{collection, logger}
+	return &mongoIdentityRepository{collection, logger, config}
 }
 
 func mongoIdentityPipeline(match bson.M) []bson.M {
@@ -179,10 +181,17 @@ func (repo *mongoIdentityRepository) GetByDigits(ctx context.Context, digits uin
 		repo.logger.Errorf("GetByDigits transaction error: %s", err)
 		return Identity, err
 	}
+
 	if len(res) == 0 {
 		return Identity, entity.ErrNotFound
 	}
-	return res[0], nil
+
+	identity := res[0]
+	identity.BirthCertificate = fmt.Sprintf("%s/%s", repo.config.AssetsURL, identity.BirthCertificate)
+	identity.NationalIdCard = fmt.Sprintf("%s/%s", repo.config.AssetsURL, identity.NationalIdCard)
+	identity.VoterCard = fmt.Sprintf("%s/%s", repo.config.AssetsURL, identity.VoterCard)
+
+	return identity, nil
 }
 
 // GetWithExclude gets the Identity with the specified Identity excluding some other data.

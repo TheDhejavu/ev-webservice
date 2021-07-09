@@ -35,6 +35,8 @@ type Config struct {
 	TokenDuration   time.Duration `yaml:"token_duration"`
 	LogFile         string        `yaml:"log_file"`
 	FileStoragePath string        `yaml:"file_storage_path"`
+	NewrelicKey     string        `yaml:"newrelic_key"`
+	AssetsURL       string        `yaml:"assets_url"`
 }
 
 // Validate validates the application configuration.

@@ -11,3 +11,5 @@ db_source: "mongodb://0.0.0.0:27017/"
 token_secret_key: 12345678901234567890123456789012
 # token_duration: 15m
 file_storage_path: "./storage"
+newrelic_key: "4d21aadefd75ec59bef219dbe9c1b63710d0NRAL"
+assets_url: "http://localhost:8080/assets"
