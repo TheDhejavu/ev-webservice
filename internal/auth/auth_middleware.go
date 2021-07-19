@@ -1,14 +1,13 @@
 package auth
 
 import (
-	"errors"
 	"fmt"
-	"net/http"
 	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/workspace/evoting/ev-webservice/internal/entity"
+	customErr "github.com/workspace/evoting/ev-webservice/internal/errors"
 	"github.com/workspace/evoting/ev-webservice/internal/utils"
 	"github.com/workspace/evoting/ev-webservice/pkg/log"
 	"github.com/workspace/evoting/ev-webservice/pkg/token"
@@ -43,29 +42,38 @@ func (m authMiddleware) AuthRequired() gin.HandlerFunc {
 		authorizationHeader := ctx.GetHeader(authorizationHeaderKey)
 
 		if len(authorizationHeader) == 0 {
-			err := errors.New("authorization header is not provided")
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, utils.ErrorResponse(err))
+			utils.GinAbortResponse(
+				ctx,
+				customErr.Unauthorized("authorization header is not provided"),
+			)
 			return
 		}
 
 		fields := strings.Fields(authorizationHeader)
 		if len(fields) < 2 {
-			err := errors.New("invalid authorization header format")
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, utils.ErrorResponse(err))
+			utils.GinAbortResponse(
+				ctx,
+				customErr.Unauthorized("invalid authorization header format"),
+			)
 			return
 		}
 
 		authorizationType := strings.ToLower(fields[0])
 		if authorizationType != authorizationTypeBearer {
-			err := fmt.Errorf("unsupported authorization type %s", authorizationType)
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, utils.ErrorResponse(err))
+			utils.GinAbortResponse(
+				ctx,
+				customErr.Unauthorized(fmt.Sprintf("unsupported authorization type %s", authorizationType)),
+			)
 			return
 		}
 
 		accessToken := fields[1]
 		payload, err := m.tokenMaker.VerifyToken(accessToken)
 		if err != nil {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, utils.ErrorResponse(err))
+			utils.GinAbortResponse(
+				ctx,
+				customErr.Unauthorized(err.Error()),
+			)
 			return
 		}
 
@@ -78,8 +86,10 @@ func (m authMiddleware) AuthRequired() gin.HandlerFunc {
 
 		if err != nil {
 			m.logger.Error("Authentication failed.")
-			err = errors.New("Unauthorized Access.")
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, utils.ErrorResponse(err))
+			utils.GinAbortResponse(
+				ctx,
+				customErr.Unauthorized("Unauthorized Access."),
+			)
 			return
 		}
 
@@ -97,20 +107,28 @@ func (m authMiddleware) AdminRequired() gin.HandlerFunc {
 
 		if authPayload.Identity {
 			m.logger.Error("Authentication failed.")
-			err = errors.New("Unauthorized Access.")
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, utils.ErrorResponse(err))
+			utils.GinAbortResponse(
+				ctx,
+				customErr.Unauthorized("Unauthorized Access."),
+			)
 			return
 		}
 		user, err := m.userService.GetByUsername(ctx, authPayload.Data)
 
 		if err != nil {
 			m.logger.Error("Authentication failed.")
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, utils.ErrorResponse(err))
+			utils.GinAbortResponse(
+				ctx,
+				customErr.Unauthorized("Authentication failed."),
+			)
 			return
 		}
 		if m.isAdmin(user) == false {
-			m.logger.Error("Unauthorized access.")
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, utils.ErrorResponse(err))
+			m.logger.Error("Authentication failed.")
+			utils.GinAbortResponse(
+				ctx,
+				customErr.Unauthorized("Unauthorized Access."),
+			)
 			return
 		}
 
@@ -118,7 +136,42 @@ func (m authMiddleware) AdminRequired() gin.HandlerFunc {
 	}
 }
 
-func (m authMiddleware) GetUser(ctx *gin.Context) *token.Payload {
+func (m authMiddleware) HasIdentity(ctx *gin.Context) bool {
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
-	return authPayload
+
+	return authPayload.Identity
+}
+
+func (m authMiddleware) HasUser(ctx *gin.Context) bool {
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+
+	return authPayload.Identity == false
+}
+
+func (m authMiddleware) GetUser(ctx *gin.Context) (user entity.User, err error) {
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+
+	user, err = m.userService.GetByID(ctx, authPayload.Data)
+	if err != nil {
+		return
+	}
+	return user, nil
+}
+
+func (m authMiddleware) GetIdentity(ctx *gin.Context) (identity entity.IdentityRead, err error) {
+	var digits uint64
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	if authPayload.Identity {
+		digits, err = strconv.ParseUint(authPayload.Data, 0, 64)
+		if err != nil {
+			return
+		}
+		identity, err = m.identityService.GetByDigits(ctx, digits)
+		if err != nil {
+			return
+		}
+		return identity, nil
+	}
+
+	return
 }

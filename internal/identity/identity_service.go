@@ -3,6 +3,7 @@ package identity
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/workspace/evoting/ev-webservice/internal/entity"
 	crypto "github.com/workspace/evoting/ev-webservice/pkg/crypto"
@@ -32,6 +33,7 @@ func (service *identityService) populateKeys(identity *entity.IdentityRead) (err
 	w, err := service.wallets.GetWallet(identity.ID.Hex())
 
 	if err != nil {
+		fmt.Println("HEKKEKEKEK")
 		return
 	}
 
@@ -72,6 +74,7 @@ func (service *identityService) GetByDigits(ctx context.Context, id uint64) (res
 	res, err = service.identityRepo.GetByDigits(ctx, id)
 
 	if err != nil {
+
 		return
 	}
 	err = service.populateKeys(&res)
@@ -115,6 +118,7 @@ func (service *identityService) Create(ctx context.Context, data map[string]inte
 	fg := facialrecognition.NewFacialRecogntion(service.logger)
 	err = fg.Register(res.ID.Hex(), facialImages)
 	if err != nil {
+		service.identityRepo.Delete(ctx, res.ID.Hex())
 		return
 	}
 
@@ -123,6 +127,7 @@ func (service *identityService) Create(ctx context.Context, data map[string]inte
 	service.wallets.Save()
 	err = service.populateKeys(&res)
 	if err != nil {
+		service.identityRepo.Delete(ctx, res.ID.Hex())
 		return
 	}
 	return

@@ -49,7 +49,7 @@ func mongoPartyPipeline(match bson.M) []bson.M {
 }
 
 // Fetch returns the political parties with the specified filter from Mongo.
-func (repo *mongoGroupRepository) Fetch(ctx context.Context, filter interface{}) (res []entity.ConsensusGroupRead, err error) {
+func (repo *mongoGroupRepository) Fetch(ctx context.Context, filter interface{}) (res []*entity.ConsensusGroupRead, err error) {
 	_filter := bson.M{}
 
 	cursor, err := repo.Collection.Aggregate(ctx, mongoPartyPipeline(_filter))
@@ -65,7 +65,7 @@ func (repo *mongoGroupRepository) Fetch(ctx context.Context, filter interface{})
 	}
 
 	if len(res) == 0 {
-		res = []entity.ConsensusGroupRead{}
+		res = []*entity.ConsensusGroupRead{}
 		return
 	}
 

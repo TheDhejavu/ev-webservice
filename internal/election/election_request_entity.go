@@ -58,24 +58,17 @@ func (request createElectionRequest) Validate(ctx context.Context, handler elect
 	return err
 }
 
-type updateElectionRequest struct {
-	Title       string `json:"title" `
-	Description string `json:"description"`
-	Country     string `json:"country" validate:"not_exists"`
-	Phase       string `json:"phase" bson:"phase,omitempty" validate:"oneof=accreditation voting start"`
-	Candidates  []struct {
-		FullName       string `json:"full_name" `
-		Position       string `json:"position"`
-		PoliticalParty string `json:"political_party"  validate:"not_exists"`
-	} `json:"candidates" validate:"dive"`
-	AccreditationAt updateRequestAt `json:"accreditation_at"`
-	VoteAt          updateRequestAt `json:"vote_at"`
-}
+type updateElectionRequest map[string]interface{}
 
-type updateRequestAt struct {
-	Start time.Time `json:"start"`
-	End   time.Time `json:"end"`
-}
+var (
+	updateElectionRule = map[string]interface{}{
+		// "country": "not_exists,omitempty",
+		// "phase":   "oneof=accreditation voting initial,omitempty",
+		// "candidates": map[string]interface{}{
+		// 	"political_party": "not_exists,omitempty",
+		// },
+	}
+)
 
 func (request updateElectionRequest) Validate(ctx context.Context, handler electionHandler, params requestParams) error {
 	handler.v.Validator.RegisterValidation("not_exists", func(fl validator.FieldLevel) bool {
@@ -90,7 +83,7 @@ func (request updateElectionRequest) Validate(ctx context.Context, handler elect
 		}
 		if fieldName == "PoliticalParty" && fieldValue != "" {
 			value, _ := handler.partyService.Exists(ctx, map[string]interface{}{
-				"political_party": request.Country,
+				"political_party": request["country"],
 			}, nil)
 			if !value {
 				return false
@@ -99,10 +92,18 @@ func (request updateElectionRequest) Validate(ctx context.Context, handler elect
 		}
 		return true
 	})
+	// fmt.Println(request)
+	errs := handler.v.Validator.ValidateMap(request, updateElectionRule)
+	if len(errs) > 0 {
+		var errors validator.ValidationErrors
+		var fieldError validator.FieldError
 
-	err := handler.v.Validator.Struct(request)
+		// fmt.Println("VALIDATION_ERROR:", errs)
+		errors = append(errors, fieldError)
+		return errors
+	}
 
-	return err
+	return nil
 }
 
 type requestParams struct {

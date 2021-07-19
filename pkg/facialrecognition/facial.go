@@ -75,22 +75,25 @@ func (f facialRecognition) Verify(id string, imageTmpPath string) (res map[strin
 	}
 	client := &http.Client{}
 	resp, err := client.Do(request)
+
 	if err != nil {
 		f.logger.Error(err)
 		return
 	} else {
-		body := &bytes.Buffer{}
-		_, err = body.ReadFrom(resp.Body)
-		if err != nil {
-			f.logger.Error(err)
-			return
-		}
-		resp.Body.Close()
-		f.logger.Info("verify facial status code:", resp.StatusCode)
-		f.logger.Info("verify facial header:", resp.Header)
+		defer resp.Body.Close()
 
-		f.logger.Info("verify facial body", body)
-		err = errors.New(body.String())
+		// body := &bytes.Buffer{}
+		// _, err = body.ReadFrom(resp.Body)
+		// if err != nil {
+		// 	f.logger.Error(err)
+		// 	return
+		// }
+
+		// f.logger.Info("verify facial status code:", resp.StatusCode)
+		// f.logger.Info("verify facial header:", resp.Header)
+
+		// f.logger.Info("verify facial body", body)
+		// err = errors.New(body.String())
 		if resp.StatusCode != 200 {
 			return
 		}

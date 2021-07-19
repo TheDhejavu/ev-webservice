@@ -3,9 +3,11 @@ package consensusgroup
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/workspace/evoting/ev-webservice/internal/entity"
 	"github.com/workspace/evoting/ev-webservice/pkg/log"
+	"github.com/workspace/evoting/ev-webservice/wallet"
 )
 
 type groupService struct {
@@ -20,8 +22,19 @@ func NewGroupService(ConsensusGroupRepo entity.ConsensusGroupRepository, logger 
 	}
 }
 
-func (service *groupService) Fetch(ctx context.Context, filter interface{}) (res []entity.ConsensusGroupRead, err error) {
+func (service *groupService) Fetch(ctx context.Context, filter interface{}) (res []*entity.ConsensusGroupRead, err error) {
 	res, err = service.groupRepo.Fetch(ctx, filter)
+
+	// Initialize system identity wallet
+	wallets, _ := wallet.InitializeWallets()
+	for i := 0; i < len(res); i++ {
+		data := res[i]
+		name := fmt.Sprintf("consensus_%s", data.ID.Hex())
+		w, _ := wallets.GetWallet(name)
+
+		data.PublicKey = string(wallet.Base58Encode(w.Main.PublicKey))
+	}
+
 	if err != nil {
 		return
 	}
@@ -56,6 +69,14 @@ func (service *groupService) Create(ctx context.Context, group map[string]interf
 	if err != nil {
 		return
 	}
+
+	// Initialize system identity wallet
+	wallets, _ := wallet.InitializeWallets()
+	// Add new identity to the wallet with the User ID
+	name := fmt.Sprintf("consensus_%s", res.ID.Hex())
+	wallets.AddWallet(name)
+	wallets.Save()
+
 	return
 }
 func (service *groupService) Delete(ctx context.Context, id string) (err error) {

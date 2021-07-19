@@ -2,7 +2,6 @@ package election
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"time"
 
@@ -59,6 +58,8 @@ func mongoElectionPipeline(match bson.M) []bson.M {
 			"_id":             "$_id",
 			"description":     bson.M{"$first": "$description"},
 			"title":           bson.M{"$first": "$title"},
+			"pubkey":          bson.M{"$first": "$pubkey"},
+			"tx_out_ref":      bson.M{"$first": "$tx_out_ref"},
 			"country":         bson.M{"$first": "$country"},
 			"phase":           bson.M{"$first": "$phase"},
 			"accrediation_at": bson.M{"$first": "$accrediation_at"},
@@ -72,8 +73,8 @@ func mongoElectionPipeline(match bson.M) []bson.M {
 }
 
 // Fetch returns the election with the specified filter from Mongo.
-func (repo *mongoElectionRepository) Fetch(ctx context.Context, filter interface{}) (res []entity.ElectionRead, err error) {
-	_filter := bson.M{}
+func (repo *mongoElectionRepository) Fetch(ctx context.Context, filter map[string]interface{}) (res []*entity.ElectionRead, err error) {
+	_filter, _ := utils.ConstructQuery(filter)
 
 	cursor, err := repo.Collection.Aggregate(ctx, mongoElectionPipeline(_filter))
 
@@ -88,7 +89,7 @@ func (repo *mongoElectionRepository) Fetch(ctx context.Context, filter interface
 	}
 
 	if len(res) == 0 {
-		return []entity.ElectionRead{}, nil
+		return []*entity.ElectionRead{}, nil
 	}
 
 	return
@@ -238,43 +239,26 @@ func (repo *mongoElectionRepository) Get(ctx context.Context, filter map[string]
 func (repo *mongoElectionRepository) Update(ctx context.Context, id string, updateElection map[string]interface{}) (entity.ElectionRead, error) {
 	var result entity.ElectionRead
 	_id, err := primitive.ObjectIDFromHex(id)
+
 	if err != nil {
 		return result, entity.ErrInvalidId
 	}
 
 	election, err := repo.GetByID(ctx, id)
-	election.UpdatedAt = time.Now()
-
 	if err != nil {
 		return result, err
 	}
-	var existingElection entity.Election
-
-	b, err := json.Marshal(election)
-	if err != nil {
-		return result, err
-	}
-
-	json.Unmarshal(b, &existingElection)
-
-	var upElection entity.Election
-	b, err = json.Marshal(updateElection)
-	if err != nil {
-		return result, err
-	}
-	json.Unmarshal(b, &upElection)
-
-	fmt.Println(upElection.VoteAt)
-
-	if value, ok := updateElection["country"]; ok {
-		_id, err := primitive.ObjectIDFromHex(fmt.Sprintf("%s", value))
+	if value, ok := updateElection["country"]; ok && value != "" {
+		_, err := primitive.ObjectIDFromHex(fmt.Sprintf("%s", value))
 		if err != nil {
 			return election, entity.ErrInvalidId
 		}
 		updateElection["country"] = _id
 	}
 
-	_, err = repo.Collection.UpdateOne(ctx, bson.M{"_id": _id}, bson.M{"$set": existingElection})
+	updateElection["updated_at"] = time.Now()
+
+	_, err = repo.Collection.UpdateOne(ctx, bson.M{"_id": _id}, bson.M{"$set": updateElection})
 	if err != nil {
 		return result, err
 	}
@@ -286,7 +270,7 @@ func (repo *mongoElectionRepository) Update(ctx context.Context, id string, upda
 func (repo *mongoElectionRepository) Create(ctx context.Context, election entity.Election) (entity.ElectionRead, error) {
 	newElection := entity.ElectionRead{}
 	election.CreatedAt = time.Now()
-	election.Phase = "start"
+	election.Phase = "initial"
 	for k := range election.Candidates {
 		election.Candidates[k].ID = primitive.NewObjectID()
 	}

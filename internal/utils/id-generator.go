@@ -3,7 +3,6 @@ package utils
 import (
 	"fmt"
 	"math/rand"
-	"strconv"
 	"time"
 
 	"github.com/chilts/sid"
@@ -66,12 +65,6 @@ func GenSid() {
 }
 
 func UniqueDigits() uint64 {
-	rand.Seed(time.Now().UnixNano())
-	p := rand.Perm(10)
-	var str string
-	for _, v := range p[:10] {
-		str += strconv.Itoa(v)
-	}
-	value, _ := strconv.ParseUint(str, 10, 32)
+	value := uint64(10000000000 + rand.Intn(99999999999-10000000000))
 	return value
 }

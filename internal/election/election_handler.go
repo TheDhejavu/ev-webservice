@@ -16,12 +16,13 @@ import (
 
 // electionHandler   represent the httphandler for Elections
 type electionHandler struct {
-	service        entity.ElectionService
-	countryService entity.CountryService
-	partyService   entity.PoliticalPartyService
-	authMiddleware entity.AuthMiddleware
-	logger         log.Logger
-	v              *utils.CustomValidator
+	service         entity.ElectionService
+	countryService  entity.CountryService
+	partyService    entity.PoliticalPartyService
+	identityService entity.IdentityService
+	authMiddleware  entity.AuthMiddleware
+	logger          log.Logger
+	v               *utils.CustomValidator
 }
 
 // RegisterHandlers will initialize the Elections resources endpoint
@@ -30,16 +31,18 @@ func RegisterHandlers(
 	service entity.ElectionService,
 	countryService entity.CountryService,
 	partyService entity.PoliticalPartyService,
+	identityService entity.IdentityService,
 	authMiddleware entity.AuthMiddleware,
 	logger log.Logger,
 ) {
 	handler := &electionHandler{
-		service:        service,
-		countryService: countryService,
-		partyService:   partyService,
-		authMiddleware: authMiddleware,
-		logger:         logger,
-		v:              utils.CustomValidators(),
+		service:         service,
+		countryService:  countryService,
+		partyService:    partyService,
+		identityService: identityService,
+		authMiddleware:  authMiddleware,
+		logger:          logger,
+		v:               utils.CustomValidators(),
 	}
 
 	router.GET("/elections",
@@ -63,6 +66,18 @@ func RegisterHandlers(
 		authMiddleware.AuthRequired(),
 		authMiddleware.AdminRequired(),
 		handler.UpdateElection,
+	)
+
+	router.POST("/elections/:id/start",
+		authMiddleware.AuthRequired(),
+		authMiddleware.AdminRequired(),
+		handler.StartElection,
+	)
+
+	router.POST("/elections/:id/stop",
+		authMiddleware.AuthRequired(),
+		authMiddleware.AdminRequired(),
+		handler.StopElection,
 	)
 }
 
@@ -110,12 +125,18 @@ func (handler electionHandler) CreateElection(ctx *gin.Context) {
 
 // GetElections gets all Elections
 func (handler *electionHandler) GetElections(ctx *gin.Context) {
-	var result []entity.ElectionRead
+	var result []*entity.ElectionRead
 	var err error
+	var filter map[string]interface{}
 
-	_ = handler.authMiddleware.GetUser(ctx)
-
-	result, err = handler.service.Fetch(ctx, nil)
+	hasIdentity := handler.authMiddleware.HasIdentity(ctx)
+	if hasIdentity {
+		identity, _ := handler.authMiddleware.GetIdentity(ctx)
+		filter = map[string]interface{}{
+			"country": identity.Origin.Country.ID,
+		}
+	}
+	result, err = handler.service.Fetch(ctx, filter)
 	if err != nil {
 		handler.logger.Error(err)
 		utils.GinErrorResponse(
@@ -194,8 +215,8 @@ func (handler electionHandler) UpdateElection(ctx *gin.Context) {
 		)
 		return
 	}
-
-	Election, err := handler.service.Update(ctx, params.Id, utils.StructToMap(body))
+	// fmt.Println(utils.StructToMap(body))
+	Election, err := handler.service.Update(ctx, params.Id, body)
 	if err != nil {
 		handler.logger.Error(err)
 		switch err {
@@ -243,4 +264,20 @@ func (handler electionHandler) DeleteElection(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "Successfully deleted"})
+}
+
+// StartElection starts election
+func (handler *electionHandler) StartElection(ctx *gin.Context) {
+
+	ctx.JSON(http.StatusOK, gin.H{
+		// "data": result,
+	})
+}
+
+// StopElection stops election
+func (handler *electionHandler) StopElection(ctx *gin.Context) {
+
+	ctx.JSON(http.StatusOK, gin.H{
+		// "data": result,
+	})
 }

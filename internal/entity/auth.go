@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/gin-gonic/gin"
-	"github.com/workspace/evoting/ev-webservice/pkg/token"
 )
 
 type AuthUser struct {
@@ -28,5 +27,8 @@ type AuthService interface {
 type AuthMiddleware interface {
 	AuthRequired() gin.HandlerFunc
 	AdminRequired() gin.HandlerFunc
-	GetUser(ctx *gin.Context) *token.Payload
+	HasIdentity(ctx *gin.Context) bool
+	HasUser(ctx *gin.Context) bool
+	GetIdentity(ctx *gin.Context) (IdentityRead, error)
+	GetUser(ctx *gin.Context) (User, error)
 }

@@ -30,7 +30,7 @@ type ConsensusGroupRead struct {
 
 //  ConsensusGroupService represent the ConsensusGroups's usecase
 type ConsensusGroupService interface {
-	Fetch(ctx context.Context, filter interface{}) (res []ConsensusGroupRead, err error)
+	Fetch(ctx context.Context, filter interface{}) (res []*ConsensusGroupRead, err error)
 	GetByID(ctx context.Context, id string) (ConsensusGroupRead, error)
 	GetByPubKey(ctx context.Context, publicKey string) (ConsensusGroupRead, error)
 	Update(ctx context.Context, id string, data map[string]interface{}) (ConsensusGroupRead, error)
@@ -41,7 +41,7 @@ type ConsensusGroupService interface {
 
 // ConsensusGroupRepository represent the ConsensusGroups's repository contract
 type ConsensusGroupRepository interface {
-	Fetch(ctx context.Context, filter interface{}) (res []ConsensusGroupRead, err error)
+	Fetch(ctx context.Context, filter interface{}) (res []*ConsensusGroupRead, err error)
 	GetByID(ctx context.Context, id string) (ConsensusGroupRead, error)
 	GetByPubKey(ctx context.Context, publicKey string) (ConsensusGroupRead, error)
 	Update(ctx context.Context, id string, data map[string]interface{}) (ConsensusGroupRead, error)

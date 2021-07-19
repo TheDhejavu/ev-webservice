@@ -23,13 +23,13 @@ var (
 
 	// Root folder of this project
 	Root            = filepath.Join(filepath.Dir(b), "../")
-	walletsPath     = path.Join(Root, "/wallet/db")
+	walletsPath     = path.Join(Root, "/storage/wallets")
 	walletsFilename = "wallets.data"
 )
 
 func InitializeWallets() (*Wallets, error) {
 	wallets := Wallets{map[string]*WalletGroup{}}
-	err := wallets.Load()
+	err := wallets.LoadFile()
 
 	return &wallets, err
 }
@@ -49,10 +49,11 @@ func (ws *Wallets) AddWallet(userId string) string {
 	userId = fmt.Sprintf("%s", userId)
 
 	ws.Wallets[userId] = wallet
+
 	return userId
 }
 
-func (ws *Wallets) Load() error {
+func (ws *Wallets) LoadFile() error {
 	walletsFile := path.Join(walletsPath, walletsFilename)
 
 	if _, err := os.Stat(walletsFile); os.IsNotExist(err) {

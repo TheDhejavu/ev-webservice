@@ -6,7 +6,6 @@ import (
 	"io"
 	"net/http"
 	"path/filepath"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 
@@ -118,6 +117,7 @@ func (handler identityHandler) CreateIdentity(ctx *gin.Context) {
 	}
 	// Multipart form
 	form, _ := ctx.MultipartForm()
+
 	facialImages := form.File["facial_images"]
 	facialImagesFiles := []string{}
 
@@ -130,7 +130,7 @@ func (handler identityHandler) CreateIdentity(ctx *gin.Context) {
 				customErr.BadRequest(fmt.Sprintf("get form err: %s", err.Error())),
 			)
 		}
-		// cwd := os.Getwd()
+
 		ext := filepath.Ext(file.Filename)
 		fileName := fmt.Sprintf("%s_%s%s", utils.GenUUID(), body.FirstName, ext)
 		fileDestination := filepath.Join("tmp", fileName)
@@ -183,10 +183,7 @@ func (handler *identityHandler) GetIdentities(ctx *gin.Context) {
 
 // GetCurrentIdentity get current loggedin identity
 func (handler identityHandler) GetCurrentIdentity(ctx *gin.Context) {
-	identity := handler.authMiddleware.GetUser(ctx)
-	print(identity.Data)
-	digits, _ := strconv.ParseUint(identity.Data, 0, 64)
-	result, err := handler.service.GetByDigits(ctx, digits)
+	result, err := handler.authMiddleware.GetIdentity(ctx)
 
 	if err != nil {
 		handler.logger.Error(err)

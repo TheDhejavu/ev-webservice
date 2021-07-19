@@ -18,6 +18,7 @@ import (
 type GroupHandler struct {
 	service        entity.ConsensusGroupService
 	countryService entity.CountryService
+	authMiddleware entity.AuthMiddleware
 	logger         log.Logger
 	v              *utils.CustomValidator
 }
@@ -27,16 +28,21 @@ func RegisterHandlers(
 	router *gin.RouterGroup,
 	service entity.ConsensusGroupService,
 	countryService entity.CountryService,
+	authMiddleware entity.AuthMiddleware,
 	logger log.Logger,
 ) {
 	handler := &GroupHandler{
 		service:        service,
 		countryService: countryService,
+		authMiddleware: authMiddleware,
 		logger:         logger,
 		v:              utils.CustomValidators(),
 	}
 
-	router.GET("/group", handler.GetGroups)
+	router.GET("/group",
+		authMiddleware.AuthRequired(),
+		handler.GetGroups,
+	)
 	router.POST("/group", handler.CreateGroup)
 	router.GET("/group/:id", handler.GetGroup)
 	router.DELETE("/group/:id", handler.DeleteGroup)
@@ -87,9 +93,17 @@ func (handler GroupHandler) CreateGroup(ctx *gin.Context) {
 
 // GetGroups gets all Groups
 func (handler *GroupHandler) GetGroups(ctx *gin.Context) {
+	var filter map[string]interface{}
 
-	handler.logger.Info("get Countries")
-	result, err := handler.service.Fetch(ctx, nil)
+	hasIdentity := handler.authMiddleware.HasIdentity(ctx)
+	if hasIdentity {
+		identity, _ := handler.authMiddleware.GetIdentity(ctx)
+		filter = map[string]interface{}{
+			"country": identity.Origin.Country.ID,
+		}
+	}
+
+	result, err := handler.service.Fetch(ctx, filter)
 	if err != nil {
 		handler.logger.Error(err)
 		utils.GinErrorResponse(

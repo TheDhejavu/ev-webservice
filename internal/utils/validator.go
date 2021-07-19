@@ -31,6 +31,7 @@ func CustomValidators() *CustomValidator {
 	}
 
 	v = validator.New()
+
 	en_translations.RegisterDefaultTranslations(v, trans)
 
 	_ = v.RegisterTranslation("required", trans, func(ut ut.Translator) error {

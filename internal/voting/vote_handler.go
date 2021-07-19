@@ -1,12 +1,9 @@
-package accrediation
+package voting
 
 import (
 	"errors"
-	"fmt"
 	"io"
-	"mime/multipart"
 	"net/http"
-	"path/filepath"
 
 	"github.com/gin-gonic/gin"
 	"github.com/workspace/evoting/ev-webservice/internal/entity"
@@ -18,30 +15,31 @@ import (
 
 // AccreditationHandler  represent the httphandler for Accreditations
 type AccreditationHandler struct {
-	logger               log.Logger
-	authMiddleware       entity.AuthMiddleware
-	accreditationService entity.AccreditationService
-	v                    *utils.CustomValidator
+	authMiddleware entity.AuthMiddleware
+	votingService  entity.VotingService
+	v              *utils.CustomValidator
+	logger         log.Logger
 }
 
 // RegisterHandlers registers handlers for different HTTP requests.
 func RegisterHandlers(
 	router *gin.RouterGroup,
 	authMiddleware entity.AuthMiddleware,
-	accreditationService entity.AccreditationService,
+	votingService entity.VotingService,
 	logger log.Logger,
 ) {
 	handler := &AccreditationHandler{
-		authMiddleware:       authMiddleware,
-		accreditationService: accreditationService,
-		logger:               logger,
-		v:                    utils.CustomValidators(),
+		authMiddleware: authMiddleware,
+		logger:         logger,
+		votingService:  votingService,
+		v:              utils.CustomValidators(),
 	}
-	router.POST("/accreditation/:id/start", handler.StartAccreditation)
-	router.POST("/accreditation/:id/stop", handler.StopAccreditation)
-	router.POST("/accreditation/:id/accredite",
+	router.POST("/voting/:id/start", handler.StartVoting)
+	router.POST("/voting/:id/stop", handler.StopVoting)
+	router.GET("/voting/:id/results", handler.GetResults)
+	router.POST("/voting/:id/cast-ballot",
 		authMiddleware.AuthRequired(),
-		handler.Accredite,
+		handler.CastBallot,
 	)
 }
 
@@ -49,7 +47,7 @@ type requestParams struct {
 	ID string `uri:"id" validate:"required"`
 }
 
-func (handler AccreditationHandler) StartAccreditation(ctx *gin.Context) {
+func (handler AccreditationHandler) StartVoting(ctx *gin.Context) {
 	var params requestParams
 	if err := ctx.ShouldBindUri(&params); err != nil {
 		handler.logger.Error(err)
@@ -66,7 +64,7 @@ func (handler AccreditationHandler) StartAccreditation(ctx *gin.Context) {
 	})
 }
 
-func (handler AccreditationHandler) StopAccreditation(ctx *gin.Context) {
+func (handler AccreditationHandler) StopVoting(ctx *gin.Context) {
 	var params requestParams
 	if err := ctx.ShouldBindUri(&params); err != nil {
 		handler.logger.Error(err)
@@ -76,31 +74,34 @@ func (handler AccreditationHandler) StopAccreditation(ctx *gin.Context) {
 		)
 		return
 	}
-	fmt.Println(params)
+
 	ctx.JSON(http.StatusOK, gin.H{
-		// "data":    AccreditationHandler,
+		// "data":    identity,
 		"message": "Successfully Stoped Accreditation process for election",
 	})
 }
 
-type AccrediteRequest struct {
-	facialImage *multipart.FileHeader `form:"facial_image" validate:"required"`
+type VotingRequest struct {
+	Candidate string `json:"candidate"`
 }
 
-func (handler AccreditationHandler) Accredite(ctx *gin.Context) {
-	var accrediteRequest AccrediteRequest
+func (handler AccreditationHandler) CastBallot(ctx *gin.Context) {
 	var params requestParams
-	if err := ctx.ShouldBind(&accrediteRequest); err != nil {
+	if err := ctx.ShouldBindUri(&params); err != nil {
+		handler.logger.Error(err)
+		utils.GinErrorResponse(
+			ctx,
+			customErr.BadRequest(err.Error()),
+		)
+		return
+	}
+	var votingRequest VotingRequest
+
+	if err := ctx.ShouldBindJSON(&votingRequest); err != nil {
 		handler.logger.Error(err)
 		if errors.Is(err, io.EOF) {
 			err = errors.New("Please Provide a valid information")
 		}
-		utils.GinErrorResponse(ctx, customErr.BadRequest(err.Error()))
-		return
-	}
-
-	if err := ctx.ShouldBindUri(&params); err != nil {
-		handler.logger.Error(err)
 		utils.GinErrorResponse(ctx, customErr.BadRequest(err.Error()))
 		return
 	}
@@ -123,39 +124,11 @@ func (handler AccreditationHandler) Accredite(ctx *gin.Context) {
 			return
 		}
 	}
-	err = handler.v.Validator.Struct(accrediteRequest)
-	if err != nil {
-		utils.GinErrorResponse(
-			ctx,
-			customErr.InternalServerError(err.Error()),
-		)
-		return
-	}
-	file, err := ctx.FormFile("facial_image")
-	if err != nil {
-		handler.logger.With(ctx).Error(err)
-		utils.GinErrorResponse(
-			ctx,
-			customErr.BadRequest(fmt.Sprintf("get form err: %s", err.Error())),
-		)
-	}
-	ext := filepath.Ext(file.Filename)
-	fileName := fmt.Sprintf("%s_%s%s", utils.GenUUID(), "facial_image", ext)
-	facialImagePath := filepath.Join("./tmp", fileName)
-	if err := ctx.SaveUploadedFile(file, facialImagePath); err != nil {
-		handler.logger.With(ctx).Error(err)
-		utils.GinErrorResponse(
-			ctx,
-			customErr.BadRequest(fmt.Sprintf("upload file err: %s", err.Error())),
-		)
-		return
-	}
 
-	res, err := handler.accreditationService.CreateBallot(
-		ctx,
-		params.ID,
+	results, err := handler.votingService.CastVote(ctx,
 		identity.ID.Hex(),
-		facialImagePath,
+		params.ID,
+		votingRequest.Candidate,
 	)
 	if err != nil {
 		utils.GinErrorResponse(
@@ -165,7 +138,32 @@ func (handler AccreditationHandler) Accredite(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{
-		"data":    res,
-		"message": "Successfully accredited",
+		"data":    results,
+		"message": "Success",
+	})
+}
+
+func (handler AccreditationHandler) GetResults(ctx *gin.Context) {
+	var params requestParams
+	if err := ctx.ShouldBindUri(&params); err != nil {
+		handler.logger.Error(err)
+		utils.GinErrorResponse(
+			ctx,
+			customErr.BadRequest(err.Error()),
+		)
+		return
+	}
+
+	results, err := handler.votingService.GetResults(ctx, params.ID)
+	if err != nil {
+		utils.GinErrorResponse(
+			ctx,
+			customErr.InternalServerError(err.Error()),
+		)
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"data":    results,
+		"message": "Success",
 	})
 }

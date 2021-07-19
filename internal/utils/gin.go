@@ -10,6 +10,10 @@ import (
 func GinErrorResponse(ctx *gin.Context, errorResponse customErr.ErrorResponse) {
 	ctx.JSON(errorResponse.Status, errorResponse)
 }
+
+func GinAbortResponse(ctx *gin.Context, errorResponse customErr.ErrorResponse) {
+	ctx.AbortWithStatusJSON(errorResponse.Status, errorResponse)
+}
 func ErrorResponse(err error) gin.H {
 	return gin.H{
 		"message": err.Error(),

@@ -37,6 +37,7 @@ type Config struct {
 	FileStoragePath string        `yaml:"file_storage_path"`
 	NewrelicKey     string        `yaml:"newrelic_key"`
 	AssetsURL       string        `yaml:"assets_url"`
+	RPCServerURL    string        `yaml:"rpc_server_url"`
 }
 
 // Validate validates the application configuration.

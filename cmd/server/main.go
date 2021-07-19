@@ -14,8 +14,11 @@ import (
 	"github.com/go-echarts/statsview"
 	newrelic "github.com/newrelic/go-agent"
 	"github.com/newrelic/go-agent/_integrations/nrgin/v1"
+	"github.com/thedhejavu/ev-blockchain-protocol/rpc"
 
+	"github.com/workspace/evoting/ev-webservice/internal/accrediation"
 	"github.com/workspace/evoting/ev-webservice/internal/auth"
+	"github.com/workspace/evoting/ev-webservice/internal/chain"
 	"github.com/workspace/evoting/ev-webservice/internal/config"
 	"github.com/workspace/evoting/ev-webservice/internal/consensusgroup"
 	"github.com/workspace/evoting/ev-webservice/internal/country"
@@ -23,6 +26,7 @@ import (
 	"github.com/workspace/evoting/ev-webservice/internal/identity"
 	"github.com/workspace/evoting/ev-webservice/internal/politicalparty"
 	"github.com/workspace/evoting/ev-webservice/internal/user"
+	"github.com/workspace/evoting/ev-webservice/internal/voting"
 	"github.com/workspace/evoting/ev-webservice/pkg/log"
 	"github.com/workspace/evoting/ev-webservice/pkg/token"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -210,26 +214,72 @@ func (server *Server) buildHandler() {
 	)
 
 	//Register consensus group handlers
+	consensusGroupRepo := consensusgroup.NewMongoGroupRepository(server.db, server.logger)
 	consensusgroup.RegisterHandlers(
 		v1,
 		consensusgroup.NewGroupService(
-			consensusgroup.NewMongoGroupRepository(server.db, server.logger),
+			consensusGroupRepo,
 			server.logger,
 		),
 		countryService,
+		authMiddleware,
 		server.logger,
 	)
 
+	//Register blockchain handler
+	blockchainRepository := chain.NewBlockchainRepository(
+		rpc.NewClient(server.config.RPCServerURL),
+	)
+
+	electionRepo := election.NewMongoElectionRepository(server.db, server.logger)
 	//Register election handlers
 	election.RegisterHandlers(
 		v1,
 		election.NewElectionService(
-			election.NewMongoElectionRepository(server.db, server.logger),
+			electionRepo,
+			blockchainRepository,
+			consensusGroupRepo,
 			server.logger,
 		),
 		countryService,
 		politicalPartyService,
+		identityService,
 		authMiddleware,
+		server.logger,
+	)
+
+	chain.RegisterHandlers(
+		v1,
+		authMiddleware,
+		chain.NewBlockchainService(
+			blockchainRepository,
+			server.logger,
+		),
+		server.logger,
+	)
+
+	//Register accreditation handler
+	accrediation.RegisterHandlers(
+		v1,
+		authMiddleware,
+		accrediation.NewAccreditationService(
+			blockchainRepository,
+			electionRepo,
+			consensusGroupRepo,
+			server.logger,
+		),
+		server.logger,
+	)
+
+	//Register voting handler
+	voting.RegisterHandlers(
+		v1,
+		authMiddleware,
+		voting.NewVotingService(
+			blockchainRepository,
+			electionRepo,
+			server.logger,
+		),
 		server.logger,
 	)
 

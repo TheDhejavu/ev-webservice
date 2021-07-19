@@ -10,7 +10,6 @@ import (
 type createGroupRequest struct {
 	Name      string `json:"name" validate:"required,exists"`
 	ServerUrl string `json:"server_url" validate:"required,url"`
-	PublicKey string `json:"public_key" validate:"required"`
 	Country   string `json:"country" validate:"valid_country,required,not_exists"`
 }
 
@@ -59,7 +58,6 @@ func (request createGroupRequest) Validate(ctx context.Context, handler GroupHan
 type updateGroupRequest struct {
 	Name      string `json:"name" validate:"exists"`
 	ServerUrl string `json:"server_url" validate:"url"`
-	PublicKey string `json:"public_key"`
 	Country   string `json:"country" validate:"valid_country,not_exists"`
 }
 
