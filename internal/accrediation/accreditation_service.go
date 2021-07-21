@@ -10,26 +10,27 @@ import (
 	"github.com/workspace/evoting/ev-webservice/internal/entity"
 	"github.com/workspace/evoting/ev-webservice/pkg/facialrecognition"
 	"github.com/workspace/evoting/ev-webservice/pkg/log"
+	"github.com/workspace/evoting/ev-webservice/wallet"
 )
 
 type accreditationService struct {
-	blockchainRepo entity.BlockchainRepository
-	electionRepo   entity.ElectionRepository
-	consensusGroup entity.ConsensusGroupRepository
-	logger         log.Logger
+	blockchainService        entity.BlockchainService
+	electionRepo          entity.ElectionRepository
+	consensusGroupService entity.ConsensusGroupService
+	logger                log.Logger
 }
 
 func NewAccreditationService(
-	blockchainRepo entity.BlockchainRepository,
+	blockchainService entity.BlockchainService,
 	electionRepo entity.ElectionRepository,
-	consensusGroup entity.ConsensusGroupRepository,
+	consensusGroupService entity.ConsensusGroupService,
 	logger log.Logger,
 ) entity.AccreditationService {
 	return &accreditationService{
-		blockchainRepo: blockchainRepo,
-		electionRepo:   electionRepo,
-		consensusGroup: consensusGroup,
-		logger:         logger,
+		blockchainService:        blockchainService,
+		electionRepo:          electionRepo,
+		consensusGroupService: consensusGroupService,
+		logger:                logger,
 	}
 }
 
@@ -38,13 +39,10 @@ func (service *accreditationService) CreateBallot(ctx context.Context, electionI
 	if err != nil {
 		return
 	}
-	var groupSigners []string
-	groups, _ := service.consensusGroup.Fetch(ctx, map[string]string{
-		"id": election.Country.ID.Hex(),
-	})
-	for i := 0; i < len(groups); i++ {
-		name := fmt.Sprintf("consensus_%s", groups[i].ID.Hex())
-		groupSigners = append(groupSigners, name)
+
+	groupSigners, err := service.consensusGroupService.GetIDs(ctx, electionId)
+	if err != nil {
+		return
 	}
 
 	fg := facialrecognition.NewFacialRecogntion(service.logger)
@@ -62,7 +60,7 @@ func (service *accreditationService) CreateBallot(ctx context.Context, electionI
 
 	key := base64.StdEncoding.EncodeToString([]byte(election.Pubkey))
 
-	bResult, err := service.blockchainRepo.CreateBallot(
+	bResult, err := service.blockchainService.CreateBallot(
 		userId,
 		key,
 		election.TxOutRef,
@@ -79,15 +77,95 @@ func (service *accreditationService) CreateBallot(ctx context.Context, electionI
 		Election:      election,
 		BallotTxOutId: fmt.Sprintf("%s", respData["tx_id"]),
 	}
-	if err != nil {
-		return
-	}
+
 	return
 }
 
-func (service *accreditationService) Start(ctx context.Context, id string) (res entity.Accreditation, err error) {
+func (service *accreditationService) Start(ctx context.Context, electionId string) (res entity.Accreditation, err error) {
+	election, err := service.electionRepo.Get(ctx, map[string]interface{}{
+		"id": electionId,
+	})
+	if err != nil {
+		return
+	}
+
+	groupSigners, err := service.consensusGroupService.GetIDs(ctx, election.Country.Hex())
+	if err != nil {
+		return
+	}
+	pubkey := base64.StdEncoding.EncodeToString([]byte(election.Pubkey))
+
+	result, err := service.blockchainService.StartAccreditation(
+		pubkey,
+		election.TxOutRef,
+		groupSigners,
+	)
+	if err != nil {
+		return
+	}
+	var v map[string]interface{}
+	inrec, _ := json.Marshal(result.Data)
+	json.Unmarshal(inrec, &v)
+
+	fmt.Println(v["tx_id"])
+	txId := fmt.Sprintf("%s", v["tx_id"])
+	election.AccreditationAt.TxStartRef = txId
+	election.Phase = "accreditation"
+
+	updatedElection, err := service.electionRepo.Update(ctx, electionId, election)
+	if err != nil {
+		return
+	}
+	updatedElection.Pubkey = string(wallet.Base58Encode([]byte(election.Pubkey)))
+
+	res = entity.Accreditation{
+		Election: updatedElection,
+	}
 	return
 }
-func (service *accreditationService) Stop(ctx context.Context, id string) (res entity.Accreditation, err error) {
+func (service *accreditationService) Stop(ctx context.Context, electionId string) (res entity.Accreditation, err error) {
+	election, err := service.electionRepo.Get(ctx, map[string]interface{}{
+		"id": electionId,
+	})
+	if err != nil {
+		return
+	}
+
+	groupSigners, err := service.consensusGroupService.GetIDs(ctx, election.Country.Hex())
+	if err != nil {
+		return
+	}
+
+	pubkey := base64.StdEncoding.EncodeToString([]byte(election.Pubkey))
+
+	fmt.Println("REF_OUT", election.AccreditationAt.TxStartRef)
+	result, err := service.blockchainService.StopAccreditation(
+		pubkey,
+		election.TxOutRef,
+		election.AccreditationAt.TxStartRef,
+		groupSigners,
+	)
+	if err != nil {
+		return
+	}
+	var v map[string]interface{}
+	inrec, _ := json.Marshal(result.Data)
+	json.Unmarshal(inrec, &v)
+
+	fmt.Println(v["tx_id"])
+	txId := fmt.Sprintf("%s", v["tx_id"])
+
+	election.AccreditationAt.TxEndRef = txId
+	election.Phase = "accreditation_end"
+
+	updatedElection, err := service.electionRepo.Update(ctx, electionId, election)
+	if err != nil {
+		return
+	}
+	updatedElection.Pubkey = string(wallet.Base58Encode([]byte(election.Pubkey)))
+
+	res = entity.Accreditation{
+		Election: updatedElection,
+	}
 	return
 }

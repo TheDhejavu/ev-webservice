@@ -58,9 +58,23 @@ type CandidateRead struct {
 }
 type ElectionAt struct {
 	TxStartRef string    `json:"tx_start_ref" bson:"tx_start_ref,omitempty"`
-	TxEndRef   string    `json:"tx_end_ref" bson:"tx_send_ref,omitempty"`
+	TxEndRef   string    `json:"tx_end_ref" bson:"tx_end_ref,omitempty"`
 	Start      time.Time `json:"start,omitempty" bson:"start,omitempty"`
 	End        time.Time `json:"end,omitempty" bson:"end,omitempty"`
+}
+
+//Election represent the Election entity
+type UpdateElection struct {
+	ID              primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	Title           string             `json:"title" bson:"title,omitempty"`
+	Description     string             `json:"description" bson:"description,omitempty"`
+	Phase           string             `json:"phase" bson:"phase,omitempty"`
+	Pubkey          []byte             `json:"pubkey" bson:"pubkey,omitempty"`
+	Country         primitive.ObjectID `json:"country" bson:"country,omitempty"`
+	TxOutRef        string             `json:"tx_out_ref" bson:"tx_out_ref,omitempty"`
+	Candidates      []*Candidate       `json:"candidates" bson:"candidates,omitempty"`
+	AccreditationAt ElectionAt         `json:"accreditation_at,omitempty" bson:"accreditation_at,omitempty"`
+	VoteAt          ElectionAt         `json:"vote_at,omitempty" bson:"vote_at,omitempty"`
 }
 
 //  ElectionService represent the Elections's usecase
@@ -70,8 +84,10 @@ type ElectionService interface {
 	Update(ctx context.Context, id string, data map[string]interface{}) (ElectionRead, error)
 	Create(ctx context.Context, election map[string]interface{}) (ElectionRead, error)
 	Delete(ctx context.Context, id string) error
+	Start(ctx context.Context, electionId string) (election ElectionRead, err error)
+	Stop(ctx context.Context, electionId string) (election ElectionRead, err error)
 	Exists(ctx context.Context, election map[string]interface{}, exclude map[string]interface{}) (bool, error)
-	GetResult(ctx context.Context, filter map[string]interface{}) (res []ElectionRead, err error)
+	GetResults(ctx context.Context, id string) (res []*CandidateRead, err error)
 }
 
 // ElectionRepository represent the Elections's repository contract
@@ -82,7 +98,7 @@ type ElectionRepository interface {
 	GetByCountry(ctx context.Context, country string) (ElectionRead, error)
 	GetWithExclude(ctx context.Context, Election map[string]interface{}, exclude map[string]interface{}) (Election, error)
 	Get(ctx context.Context, filter map[string]interface{}) (Election, error)
-	Update(ctx context.Context, id string, data map[string]interface{}) (ElectionRead, error)
+	Update(ctx context.Context, id string, data Election) (ElectionRead, error)
 	Create(ctx context.Context, election Election) (ElectionRead, error)
 	Delete(ctx context.Context, id string) error
 }

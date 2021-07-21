@@ -36,7 +36,7 @@ func RegisterHandlers(
 
 func (handler BlockchainHandler) GetBlockchain(ctx *gin.Context) {
 
-	res, err := handler.blockchainService.GetBlockchain(ctx)
+	res, err := handler.blockchainService.QueryBlockchain()
 	if err != nil {
 		utils.GinErrorResponse(
 			ctx,
@@ -46,7 +46,7 @@ func (handler BlockchainHandler) GetBlockchain(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"data":    res,
+		"data":    res.Data,
 		"message": "Success",
 	})
 }

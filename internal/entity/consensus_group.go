@@ -37,6 +37,7 @@ type ConsensusGroupService interface {
 	Create(ctx context.Context, data map[string]interface{}) (ConsensusGroupRead, error)
 	Exists(ctx context.Context, group map[string]interface{}, exclude map[string]interface{}) (bool, error)
 	Delete(ctx context.Context, id string) error
+	GetIDs(ctx context.Context, id string) (groups []string, err error)
 }
 
 // ConsensusGroupRepository represent the ConsensusGroups's repository contract

@@ -55,19 +55,35 @@ func mongoElectionPipeline(match bson.M) []bson.M {
 		},
 		{"$unwind": "$candidates.political_party"},
 		{"$group": bson.M{
-			"_id":             "$_id",
-			"description":     bson.M{"$first": "$description"},
-			"title":           bson.M{"$first": "$title"},
-			"pubkey":          bson.M{"$first": "$pubkey"},
-			"tx_out_ref":      bson.M{"$first": "$tx_out_ref"},
-			"country":         bson.M{"$first": "$country"},
-			"phase":           bson.M{"$first": "$phase"},
-			"accrediation_at": bson.M{"$first": "$accrediation_at"},
-			"vote_at":         bson.M{"$first": "$vote_at"},
-			"created_at":      bson.M{"$first": "$created_at"},
-			"updated_at":      bson.M{"$first": "$updated_at"},
-			"candidates":      bson.M{"$push": "$candidates"},
+			"_id":              "$_id",
+			"description":      bson.M{"$first": "$description"},
+			"title":            bson.M{"$first": "$title"},
+			"pubkey":           bson.M{"$first": "$pubkey"},
+			"tx_out_ref":       bson.M{"$first": "$tx_out_ref"},
+			"country":          bson.M{"$first": "$country"},
+			"phase":            bson.M{"$first": "$phase"},
+			"accreditation_at": bson.M{"$first": "$accreditation_at"},
+			"vote_at":          bson.M{"$first": "$vote_at"},
+			"created_at":       bson.M{"$first": "$created_at"},
+			"updated_at":       bson.M{"$first": "$updated_at"},
+			"candidates":       bson.M{"$push": "$candidates"},
 		},
+		},
+		{
+			"$project": bson.M{
+				"_id":              "$_id",
+				"description":      "$description",
+				"title":            "$title",
+				"pubkey":           "$pubkey",
+				"tx_out_ref":       "$tx_out_ref",
+				"country":          "$country",
+				"phase":            "$phase",
+				"accreditation_at": "$accreditation_at",
+				"vote_at":          "$vote_at",
+				"created_at":       "$created_at",
+				"updated_at":       "$updated_at",
+				"candidates":       "$candidates",
+			},
 		},
 	}
 }
@@ -227,7 +243,7 @@ func (repo *mongoElectionRepository) Get(ctx context.Context, filter map[string]
 		case mongo.ErrNoDocuments:
 			return Election, entity.ErrNotFound
 		default:
-			repo.logger.Errorf("GetWithExclude transaction error: %s", err)
+			repo.logger.Errorf("GET transaction error: %s", err)
 			return Election, err
 		}
 	}
@@ -236,7 +252,7 @@ func (repo *mongoElectionRepository) Get(ctx context.Context, filter map[string]
 }
 
 // Update updates the Election with the specified Id from mongo.
-func (repo *mongoElectionRepository) Update(ctx context.Context, id string, updateElection map[string]interface{}) (entity.ElectionRead, error) {
+func (repo *mongoElectionRepository) Update(ctx context.Context, id string, updateElection entity.Election) (entity.ElectionRead, error) {
 	var result entity.ElectionRead
 	_id, err := primitive.ObjectIDFromHex(id)
 
@@ -244,19 +260,14 @@ func (repo *mongoElectionRepository) Update(ctx context.Context, id string, upda
 		return result, entity.ErrInvalidId
 	}
 
-	election, err := repo.GetByID(ctx, id)
+	_, err = repo.GetByID(ctx, id)
 	if err != nil {
 		return result, err
 	}
-	if value, ok := updateElection["country"]; ok && value != "" {
-		_, err := primitive.ObjectIDFromHex(fmt.Sprintf("%s", value))
-		if err != nil {
-			return election, entity.ErrInvalidId
-		}
-		updateElection["country"] = _id
-	}
 
-	updateElection["updated_at"] = time.Now()
+	fmt.Println(updateElection)
+
+	updateElection.UpdatedAt = time.Now()
 
 	_, err = repo.Collection.UpdateOne(ctx, bson.M{"_id": _id}, bson.M{"$set": updateElection})
 	if err != nil {

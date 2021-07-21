@@ -13,6 +13,6 @@ type Accreditation struct {
 //  AccreditationService represent the Accreditations's usecase
 type AccreditationService interface {
 	CreateBallot(ctx context.Context, electionId, userId, facialImagePath string) (Accreditation, error)
-	Start(ctx context.Context, id string) (Accreditation, error)
-	Stop(ctx context.Context, id string) (Accreditation, error)
+	Start(ctx context.Context, electionId string) (Accreditation, error)
+	Stop(ctx context.Context, electionId string) (Accreditation, error)
 }

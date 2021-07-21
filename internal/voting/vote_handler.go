@@ -34,9 +34,16 @@ func RegisterHandlers(
 		votingService:  votingService,
 		v:              utils.CustomValidators(),
 	}
-	router.POST("/voting/:id/start", handler.StartVoting)
-	router.POST("/voting/:id/stop", handler.StopVoting)
-	router.GET("/voting/:id/results", handler.GetResults)
+	router.POST("/voting/:id/start",
+		authMiddleware.AuthRequired(),
+		authMiddleware.AdminRequired(),
+		handler.StartVoting,
+	)
+	router.POST("/voting/:id/stop",
+		authMiddleware.AuthRequired(),
+		authMiddleware.AdminRequired(),
+		handler.StopVoting,
+	)
 	router.POST("/voting/:id/cast-ballot",
 		authMiddleware.AuthRequired(),
 		handler.CastBallot,
@@ -44,7 +51,7 @@ func RegisterHandlers(
 }
 
 type requestParams struct {
-	ID string `uri:"id" validate:"required"`
+	Id string `uri:"id" validate:"required"`
 }
 
 func (handler AccreditationHandler) StartVoting(ctx *gin.Context) {
@@ -58,9 +65,30 @@ func (handler AccreditationHandler) StartVoting(ctx *gin.Context) {
 		return
 	}
 
+	result, err := handler.votingService.Start(ctx, params.Id)
+
+	if err != nil {
+		handler.logger.Error(err)
+		switch err {
+		case entity.ErrNotFound:
+			utils.GinErrorResponse(
+				ctx,
+				customErr.NotFound("Election with provided ID does not exist"),
+			)
+			return
+		default:
+			utils.GinErrorResponse(
+				ctx,
+				customErr.InternalServerError(err.Error()),
+			)
+			return
+		}
+	}
+
+	handler.logger.Info(result)
 	ctx.JSON(http.StatusOK, gin.H{
-		// "data":    identity,
-		"message": "Successfully Started Accreditation process for election",
+		"data":    result,
+		"message": "Successfully Started voting process for election",
 	})
 }
 
@@ -75,9 +103,30 @@ func (handler AccreditationHandler) StopVoting(ctx *gin.Context) {
 		return
 	}
 
+	result, err := handler.votingService.Stop(ctx, params.Id)
+
+	if err != nil {
+		handler.logger.Error(err)
+		switch err {
+		case entity.ErrNotFound:
+			utils.GinErrorResponse(
+				ctx,
+				customErr.NotFound("Election with provided ID does not exist"),
+			)
+			return
+		default:
+			utils.GinErrorResponse(
+				ctx,
+				customErr.InternalServerError(err.Error()),
+			)
+			return
+		}
+	}
+
+	handler.logger.Info(result)
 	ctx.JSON(http.StatusOK, gin.H{
-		// "data":    identity,
-		"message": "Successfully Stoped Accreditation process for election",
+		"data":    result,
+		"message": "Successfully Stopped voting process for election",
 	})
 }
 
@@ -127,34 +176,9 @@ func (handler AccreditationHandler) CastBallot(ctx *gin.Context) {
 
 	results, err := handler.votingService.CastVote(ctx,
 		identity.ID.Hex(),
-		params.ID,
+		params.Id,
 		votingRequest.Candidate,
 	)
-	if err != nil {
-		utils.GinErrorResponse(
-			ctx,
-			customErr.InternalServerError(err.Error()),
-		)
-		return
-	}
-	ctx.JSON(http.StatusOK, gin.H{
-		"data":    results,
-		"message": "Success",
-	})
-}
-
-func (handler AccreditationHandler) GetResults(ctx *gin.Context) {
-	var params requestParams
-	if err := ctx.ShouldBindUri(&params); err != nil {
-		handler.logger.Error(err)
-		utils.GinErrorResponse(
-			ctx,
-			customErr.BadRequest(err.Error()),
-		)
-		return
-	}
-
-	results, err := handler.votingService.GetResults(ctx, params.ID)
 	if err != nil {
 		utils.GinErrorResponse(
 			ctx,

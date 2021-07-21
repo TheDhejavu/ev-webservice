@@ -9,7 +9,7 @@ import (
 
 const (
 	defaultServerPort    = 8080
-	defaultTokenDuration = time.Hour
+	defaultTokenDuration = time.Hour * 24 * 30
 	defaultLogFile       = "./logs/app.log"
 	defaultServerHost    = "0.0.0.0"
 )

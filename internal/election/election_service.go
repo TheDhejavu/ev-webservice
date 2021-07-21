@@ -3,7 +3,9 @@ package election
 import (
 	"context"
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/workspace/evoting/ev-webservice/internal/entity"
@@ -13,15 +15,15 @@ import (
 
 type electionService struct {
 	electionRepo   entity.ElectionRepository
-	blockchainRepo entity.BlockchainRepository
-	consensusGroup entity.ConsensusGroupRepository
+	blockchainRepo entity.BlockchainService
+	consensusGroup entity.ConsensusGroupService
 	logger         log.Logger
 }
 
 func NewElectionService(
 	electionRepo entity.ElectionRepository,
-	blockchainRepo entity.BlockchainRepository,
-	consensusGroup entity.ConsensusGroupRepository,
+	blockchainRepo entity.BlockchainService,
+	consensusGroup entity.ConsensusGroupService,
 	logger log.Logger,
 ) entity.ElectionService {
 	return &electionService{
@@ -52,17 +54,24 @@ func (service *electionService) GetByID(ctx context.Context, id string) (res ent
 	return
 }
 func (service *electionService) Update(ctx context.Context, id string, data map[string]interface{}) (res entity.ElectionRead, err error) {
-	value, _ := service.Exists(ctx, map[string]interface{}{"_id": id}, nil)
-	if value == false {
-		return res, entity.ErrNotFound
+	election, err := service.electionRepo.Get(ctx, map[string]interface{}{"_id": id})
+
+	if err != nil {
+		switch err {
+		case entity.ErrNotFound:
+			return res, err
+		default:
+			return res, err
+		}
 	}
 
-	res, err = service.electionRepo.Update(ctx, id, data)
+	res, err = service.electionRepo.Update(ctx, id, election)
 	if err != nil {
 		return
 	}
 	return
 }
+
 func (service *electionService) Create(ctx context.Context, data map[string]interface{}) (res entity.ElectionRead, err error) {
 	jsonbody, err := json.Marshal(data)
 	if err != nil {
@@ -77,41 +86,11 @@ func (service *electionService) Create(ctx context.Context, data map[string]inte
 	w := wallet.MakeWalletGroup()
 
 	election.Pubkey = w.Main.PublicKey
-	var candidates [][]byte
-	var groupSigners []string
 	for i := 0; i < len(election.Candidates); i++ {
 		candidate := election.Candidates[i]
 		w := wallet.MakeWalletGroup()
 		candidate.Pubkey = w.Main.PublicKey
-		candidates = append(candidates, w.Main.PublicKey)
 	}
-
-	groups, _ := service.consensusGroup.Fetch(ctx, map[string]string{
-		"id": election.Country.Hex(),
-	})
-	for i := 0; i < len(groups); i++ {
-		name := fmt.Sprintf("consensus_%s", groups[i].ID.Hex())
-		groupSigners = append(groupSigners, name)
-	}
-
-	pubkey := base64.StdEncoding.EncodeToString(election.Pubkey)
-	// fmt.Println(groupSigners, pubkey)
-	result, _ := service.blockchainRepo.StartElection(
-		pubkey,
-		election.Title,
-		election.Description,
-		100,
-		candidates,
-		groupSigners,
-	)
-	var v map[string]interface{}
-	inrec, _ := json.Marshal(result.Data)
-	json.Unmarshal(inrec, &v)
-
-	fmt.Println(v["tx_id"])
-	idStart := v["tx_id"]
-
-	election.TxOutRef = fmt.Sprintf("%s", idStart)
 
 	res, err = service.electionRepo.Create(ctx, *election)
 	if err != nil {
@@ -119,6 +98,101 @@ func (service *electionService) Create(ctx context.Context, data map[string]inte
 	}
 
 	res.Pubkey = string(wallet.Base58Encode([]byte(res.Pubkey)))
+
+	return
+}
+
+func (service *electionService) Start(ctx context.Context, electionId string) (res entity.ElectionRead, err error) {
+	election, err := service.electionRepo.Get(ctx, map[string]interface{}{"_id": electionId})
+
+	if err != nil {
+		return
+	}
+
+	groups, _ := service.consensusGroup.Fetch(ctx, map[string]string{
+		"id": election.Country.Hex(),
+	})
+
+	if len(groups) == 0 {
+		err = errors.New("No consensus group found")
+		return
+	}
+	var candidates [][]byte
+	var groupSigners []string
+	for i := 0; i < len(groups); i++ {
+		name := fmt.Sprintf("consensus_%s", groups[i].ID.Hex())
+		groupSigners = append(groupSigners, name)
+	}
+
+	for i := 0; i < len(election.Candidates); i++ {
+		pubkey := election.Candidates[i].Pubkey
+		candidates = append(candidates, pubkey)
+	}
+
+	pubkey := base64.StdEncoding.EncodeToString([]byte(election.Pubkey))
+
+	result, err := service.blockchainRepo.StartElection(
+		pubkey,
+		election.Title,
+		election.Description,
+		100,
+		candidates,
+		groupSigners,
+	)
+	if err != nil {
+		return
+	}
+	var v map[string]interface{}
+	inrec, _ := json.Marshal(result.Data)
+	json.Unmarshal(inrec, &v)
+
+	fmt.Println(v["tx_id"])
+	txId := fmt.Sprintf("%s", v["tx_id"])
+	election.TxOutRef = txId
+
+	updatedElection, err := service.electionRepo.Update(ctx, electionId, election)
+	if err != nil {
+		return
+	}
+
+	updatedElection.Pubkey = string(wallet.Base58Encode([]byte(election.Pubkey)))
+
+	res = updatedElection
+	return
+}
+
+func (service *electionService) Stop(ctx context.Context, electionId string) (election entity.ElectionRead, err error) {
+	election, err = service.electionRepo.GetByID(ctx, electionId)
+	if err != nil {
+		return
+	}
+
+	groupSigners, err := service.consensusGroup.GetIDs(ctx, election.Country.ID.Hex())
+	if err != nil {
+		return
+	}
+	var candidates [][]byte
+	for i := 0; i < len(election.Candidates); i++ {
+		pubkey := election.Candidates[i].Pubkey
+		candidates = append(candidates, pubkey)
+	}
+
+	pubkey := base64.StdEncoding.EncodeToString([]byte(election.Pubkey))
+
+	result, err := service.blockchainRepo.StopElection(
+		pubkey,
+		groupSigners,
+	)
+	if err != nil {
+		return
+	}
+	var v map[string]interface{}
+	inrec, _ := json.Marshal(result.Data)
+	json.Unmarshal(inrec, &v)
+
+	fmt.Println(v["tx_id"])
+
+	election.Pubkey = string(wallet.Base58Encode([]byte(election.Pubkey)))
 
 	return
 }
@@ -154,6 +228,32 @@ func (service *electionService) Exists(ctx context.Context, filter map[string]in
 	return true, err
 }
 
-func (services *electionService) GetResult(ctx context.Context, filter map[string]interface{}) (res []entity.ElectionRead, err error) {
+func (service *electionService) GetResults(ctx context.Context, id string) (res []*entity.CandidateRead, err error) {
+	election, err := service.electionRepo.GetByID(ctx, id)
+
+	if err != nil {
+		return
+	}
+	key := base64.StdEncoding.EncodeToString([]byte(election.Pubkey))
+	results, err := service.blockchainRepo.QueryResults(key)
+	if err != nil {
+		return
+	}
+
+	var resp map[string]int64
+
+	inrec, _ := json.Marshal(results.Data)
+	json.Unmarshal(inrec, &resp)
+
+	res = election.Candidates
+	for i := 0; i < len(res); i++ {
+		hexStr := hex.EncodeToString(res[i].Pubkey)
+		if v, ok := resp[hexStr]; ok {
+			res[i].Result = v
+		}
+	}
+
+	fmt.Println("RESPONSE", results)
+
 	return
 }

@@ -215,19 +215,20 @@ func (server *Server) buildHandler() {
 
 	//Register consensus group handlers
 	consensusGroupRepo := consensusgroup.NewMongoGroupRepository(server.db, server.logger)
+	consensusGroupService := consensusgroup.NewGroupService(
+		consensusGroupRepo,
+		server.logger,
+	)
 	consensusgroup.RegisterHandlers(
 		v1,
-		consensusgroup.NewGroupService(
-			consensusGroupRepo,
-			server.logger,
-		),
+		consensusGroupService,
 		countryService,
 		authMiddleware,
 		server.logger,
 	)
 
 	//Register blockchain handler
-	blockchainRepository := chain.NewBlockchainRepository(
+	blockchainService := chain.NewBlockchainService(
 		rpc.NewClient(server.config.RPCServerURL),
 	)
 
@@ -237,8 +238,8 @@ func (server *Server) buildHandler() {
 		v1,
 		election.NewElectionService(
 			electionRepo,
-			blockchainRepository,
-			consensusGroupRepo,
+			blockchainService,
+			consensusGroupService,
 			server.logger,
 		),
 		countryService,
@@ -251,10 +252,7 @@ func (server *Server) buildHandler() {
 	chain.RegisterHandlers(
 		v1,
 		authMiddleware,
-		chain.NewBlockchainService(
-			blockchainRepository,
-			server.logger,
-		),
+		blockchainService,
 		server.logger,
 	)
 
@@ -263,9 +261,9 @@ func (server *Server) buildHandler() {
 		v1,
 		authMiddleware,
 		accrediation.NewAccreditationService(
-			blockchainRepository,
+			blockchainService,
 			electionRepo,
-			consensusGroupRepo,
+			consensusGroupService,
 			server.logger,
 		),
 		server.logger,
@@ -276,8 +274,9 @@ func (server *Server) buildHandler() {
 		v1,
 		authMiddleware,
 		voting.NewVotingService(
-			blockchainRepository,
+			blockchainService,
 			electionRepo,
+			consensusGroupService,
 			server.logger,
 		),
 		server.logger,

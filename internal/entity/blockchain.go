@@ -1,8 +1,6 @@
 package entity
 
 import (
-	"context"
-
 	blockchain "github.com/thedhejavu/ev-blockchain-protocol/core"
 	"github.com/thedhejavu/ev-blockchain-protocol/rpc"
 )
@@ -10,10 +8,6 @@ import (
 type Blockchain struct{}
 
 type BlockchainService interface {
-	GetBlockchain(ctx context.Context) ([]map[string]interface{}, error)
-}
-
-type BlockchainRepository interface {
 	FindTxWithTxOutput(pubkey, ttype string) blockchain.Transaction
 	QueryResults(pubkey string) (rpc.Result, error)
 	QueryBlockchain() (rpc.Result, error)

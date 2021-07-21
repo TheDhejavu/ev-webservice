@@ -61,5 +61,6 @@ func ConstructQueryWithTypes(filter map[string]interface{}, types map[string][]s
 	}
 
 	query, err = ConstructQuery(filter)
+	fmt.Println(query)
 	return query, nil
 }

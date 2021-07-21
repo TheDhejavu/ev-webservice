@@ -3,6 +3,7 @@ package consensusgroup
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/workspace/evoting/ev-webservice/internal/entity"
@@ -118,4 +119,20 @@ func (service *groupService) Exists(ctx context.Context, filter map[string]inter
 	}
 
 	return true, err
+}
+
+func (service *groupService) GetIDs(ctx context.Context, id string) (groupSigners []string, err error) {
+	consensusGroups, err := service.groupRepo.Fetch(ctx, map[string]string{
+		"id": id,
+	})
+	if len(consensusGroups) == 0 {
+		err = errors.New("No consensus group found")
+		return
+	}
+
+	for i := 0; i < len(consensusGroups); i++ {
+		name := fmt.Sprintf("consensus_%s", consensusGroups[i].ID.Hex())
+		groupSigners = append(groupSigners, name)
+	}
+	return
 }

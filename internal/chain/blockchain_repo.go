@@ -29,15 +29,15 @@ var (
 	sigCount     = 4
 )
 
-type blockchainRepo struct {
+type blockchainService struct {
 	client *rpc.Client
 }
 
-func NewBlockchainRepository(client *rpc.Client) entity.BlockchainRepository {
-	return &blockchainRepo{client}
+func NewBlockchainService(client *rpc.Client) entity.BlockchainService {
+	return &blockchainService{client}
 }
 
-func (repo *blockchainRepo) FindTxWithTxOutput(pubkey, ttype string) blockchain.Transaction {
+func (repo *blockchainService) FindTxWithTxOutput(pubkey, ttype string) blockchain.Transaction {
 	data := map[string]string{
 		"pubkey": pubkey,
 		"type":   ttype,
@@ -59,7 +59,7 @@ func (repo *blockchainRepo) FindTxWithTxOutput(pubkey, ttype string) blockchain.
 	return tx
 }
 
-func (repo *blockchainRepo) QueryResults(pubkey string) (rpc.Result, error) {
+func (repo *blockchainService) QueryResults(pubkey string) (rpc.Result, error) {
 	fmt.Println(pubkey)
 	data := map[string]string{
 		"pubkey": pubkey,
@@ -73,7 +73,7 @@ func (repo *blockchainRepo) QueryResults(pubkey string) (rpc.Result, error) {
 	logger.Info(resp.Body.Result)
 	return resp.Body.Result, nil
 }
-func (repo *blockchainRepo) QueryBlockchain() (rpc.Result, error) {
+func (repo *blockchainService) QueryBlockchain() (rpc.Result, error) {
 	data := map[string]string{}
 
 	resp, err := repo.client.Do("QueryBlockchain", data)
@@ -83,7 +83,7 @@ func (repo *blockchainRepo) QueryBlockchain() (rpc.Result, error) {
 	}
 	if resp.Body.HasError() {
 		logger.Error(resp.Body.Error)
-		return rpc.Result{}, errors.New(resp.Body.Error.Message)
+		return rpc.Result{}, errors.New(resp.Body.Error.Data)
 	}
 
 	logger.Info(resp.Body.Result)
@@ -91,7 +91,7 @@ func (repo *blockchainRepo) QueryBlockchain() (rpc.Result, error) {
 	return resp.Body.Result, nil
 }
 
-func (repo *blockchainRepo) QueryUnUsedBallotTxs(pubkey string) []map[string]blockchain.TxBallotOutput {
+func (repo *blockchainService) QueryUnUsedBallotTxs(pubkey string) []map[string]blockchain.TxBallotOutput {
 	data := map[string]string{
 		"pubkey": pubkey,
 	}
@@ -112,7 +112,7 @@ func (repo *blockchainRepo) QueryUnUsedBallotTxs(pubkey string) []map[string]blo
 	return utxbo
 }
 
-func (repo *blockchainRepo) GetTransaction(id string) (rpc.Result, error) {
+func (repo *blockchainService) GetTransaction(id string) (rpc.Result, error) {
 
 	data := map[string]string{
 		"id": id,
@@ -125,7 +125,7 @@ func (repo *blockchainRepo) GetTransaction(id string) (rpc.Result, error) {
 	}
 	if resp.Body.HasError() {
 		logger.Error(resp.Body.Error)
-		return rpc.Result{}, errors.New(resp.Body.Error.Message)
+		return rpc.Result{}, errors.New(resp.Body.Error.Data)
 	}
 
 	logger.Info(resp.Body.Result)
@@ -137,7 +137,7 @@ type ElectionOutput struct {
 	Data blockchain.TxElectionOutput `json:"data"`
 }
 
-func (repo *blockchainRepo) StartElection(pubkey, title, description string, totalPeople int64, candidates [][]byte, groupSigners []string) (rpc.Result, error) {
+func (repo *blockchainService) StartElection(pubkey, title, description string, totalPeople int64, candidates [][]byte, groupSigners []string) (rpc.Result, error) {
 	electionPubkey, _ := base64.StdEncoding.DecodeString(pubkey)
 
 	txOut := blockchain.TxElectionOutput{
@@ -187,7 +187,7 @@ func (repo *blockchainRepo) StartElection(pubkey, title, description string, tot
 	}
 	if resp.Body.HasError() {
 		logger.Error(resp.Body.Error)
-		return rpc.Result{}, errors.New(resp.Body.Error.Message)
+		return rpc.Result{}, errors.New(resp.Body.Error.Data)
 	}
 
 	logger.Info(resp.Body.Result)
@@ -200,7 +200,7 @@ type ElectionInput struct {
 	Data   blockchain.TxElectionInput `json:"data"`
 }
 
-func (repo *blockchainRepo) StopElection(pubkey string, groupSigners []string) (rpc.Result, error) {
+func (repo *blockchainService) StopElection(pubkey string, groupSigners []string) (rpc.Result, error) {
 	electionPubkey, _ := base64.StdEncoding.DecodeString(pubkey)
 	txElectionOut := repo.FindTxWithTxOutput(pubkey, "election_tx")
 
@@ -247,7 +247,7 @@ func (repo *blockchainRepo) StopElection(pubkey string, groupSigners []string) (
 	}
 	if resp.Body.HasError() {
 		logger.Error(resp.Body.Error)
-		return rpc.Result{}, errors.New(resp.Body.Error.Message)
+		return rpc.Result{}, errors.New(resp.Body.Error.Data)
 	}
 
 	logger.Info(resp.Body.Result)
@@ -260,7 +260,7 @@ type AccreditationOutput struct {
 	Data   blockchain.TxAcOutput `json:"data"`
 }
 
-func (repo *blockchainRepo) StartAccreditation(pubkey, txElectionOutId string, groupSigners []string) (rpc.Result, error) {
+func (repo *blockchainService) StartAccreditation(pubkey, txElectionOutId string, groupSigners []string) (rpc.Result, error) {
 	electionPubkey, _ := base64.StdEncoding.DecodeString(pubkey)
 	txId, _ := base64.StdEncoding.DecodeString(txElectionOutId)
 
@@ -307,7 +307,7 @@ func (repo *blockchainRepo) StartAccreditation(pubkey, txElectionOutId string, g
 	}
 	if resp.Body.HasError() {
 		logger.Error(resp.Body.Error)
-		return rpc.Result{}, errors.New(resp.Body.Error.Message)
+		return rpc.Result{}, errors.New(resp.Body.Error.Data)
 	}
 
 	logger.Info(resp.Body.Result)
@@ -320,7 +320,7 @@ type AccreditationInput struct {
 	Data   blockchain.TxAcInput `json:"data"`
 }
 
-func (repo *blockchainRepo) StopAccreditation(pubkey, txElectionOutId string, txAcOutId string, groupSigners []string) (rpc.Result, error) {
+func (repo *blockchainService) StopAccreditation(pubkey, txElectionOutId string, txAcOutId string, groupSigners []string) (rpc.Result, error) {
 	txId, _ := base64.StdEncoding.DecodeString(txElectionOutId)
 	txOut, _ := base64.StdEncoding.DecodeString(txAcOutId)
 	electionPubkey, _ := base64.StdEncoding.DecodeString(pubkey)
@@ -371,7 +371,7 @@ func (repo *blockchainRepo) StopAccreditation(pubkey, txElectionOutId string, tx
 	}
 	if resp.Body.HasError() {
 		logger.Error(resp.Body.Error)
-		return rpc.Result{}, errors.New(resp.Body.Error.Message)
+		return rpc.Result{}, errors.New(resp.Body.Error.Data)
 	}
 
 	logger.Info(resp.Body.Result)
@@ -384,7 +384,7 @@ type VotingOutput struct {
 	Data   blockchain.TxVotingOutput `json:"data"`
 }
 
-func (repo *blockchainRepo) StartVoting(pubkey string, txElectionOutId string, groupSigners []string) (rpc.Result, error) {
+func (repo *blockchainService) StartVoting(pubkey string, txElectionOutId string, groupSigners []string) (rpc.Result, error) {
 	txId, _ := base64.StdEncoding.DecodeString(txElectionOutId)
 	electionPubkey, _ := base64.StdEncoding.DecodeString(pubkey)
 
@@ -432,7 +432,7 @@ func (repo *blockchainRepo) StartVoting(pubkey string, txElectionOutId string, g
 	}
 	if resp.Body.HasError() {
 		logger.Error(resp.Body.Error)
-		return rpc.Result{}, errors.New(resp.Body.Error.Message)
+		return rpc.Result{}, errors.New(resp.Body.Error.Data)
 	}
 
 	logger.Info(resp.Body.Result)
@@ -445,7 +445,7 @@ type VotingInput struct {
 	Data   blockchain.TxVotingInput `json:"data"`
 }
 
-func (repo *blockchainRepo) StopVoting(pubkey, txElectionOutId, txVotingOutId string, groupSigners []string) (rpc.Result, error) {
+func (repo *blockchainService) StopVoting(pubkey, txElectionOutId, txVotingOutId string, groupSigners []string) (rpc.Result, error) {
 	txId, _ := base64.StdEncoding.DecodeString(txElectionOutId)
 	txOut, _ := base64.StdEncoding.DecodeString(txVotingOutId)
 	electionPubkey, _ := base64.StdEncoding.DecodeString(pubkey)
@@ -495,7 +495,7 @@ func (repo *blockchainRepo) StopVoting(pubkey, txElectionOutId, txVotingOutId st
 	}
 	if resp.Body.HasError() {
 		logger.Error(resp.Body.Error)
-		return rpc.Result{}, errors.New(resp.Body.Error.Message)
+		return rpc.Result{}, errors.New(resp.Body.Error.Data)
 	}
 
 	logger.Info(resp.Body.Result)
@@ -508,7 +508,7 @@ type BallotOutput struct {
 	Data   blockchain.TxBallotOutput `json:"data"`
 }
 
-func (repo *blockchainRepo) CreateBallot(userId, pubkey, txElectionOutId string, groupSigners []string) (rpc.Result, error) {
+func (repo *blockchainService) CreateBallot(userId, pubkey, txElectionOutId string, groupSigners []string) (rpc.Result, error) {
 	var keyRingByte [][]byte
 
 	txId, _ := base64.StdEncoding.DecodeString(txElectionOutId)
@@ -578,7 +578,7 @@ func (repo *blockchainRepo) CreateBallot(userId, pubkey, txElectionOutId string,
 	}
 	if resp.Body.HasError() {
 		logger.Error(resp.Body.Error)
-		return rpc.Result{}, errors.New(resp.Body.Error.Message)
+		return rpc.Result{}, errors.New(resp.Body.Error.Data)
 	}
 
 	logger.Info(resp.Body.Result)
@@ -591,7 +591,7 @@ type BallotInput struct {
 	Data   blockchain.TxBallotInput `json:"data"`
 }
 
-func (repo *blockchainRepo) CastBallot(userId, pubkey, txElectionOutId, candidatePubkey string) (rpc.Result, error) {
+func (repo *blockchainService) CastBallot(userId, pubkey, txElectionOutId, candidatePubkey string) (rpc.Result, error) {
 	electionPubkey, _ := base64.StdEncoding.DecodeString(pubkey)
 	candidate, _ := base64.StdEncoding.DecodeString(candidatePubkey)
 	txId, _ := base64.StdEncoding.DecodeString(txElectionOutId)
@@ -665,7 +665,7 @@ func (repo *blockchainRepo) CastBallot(userId, pubkey, txElectionOutId, candidat
 
 	if resp.Body.HasError() {
 		logger.Error(resp.Body.Error)
-		return rpc.Result{}, errors.New(resp.Body.Error.Message)
+		return rpc.Result{}, errors.New(resp.Body.Error.Data)
 	}
 
 	logger.Info(resp.Body.Result)
@@ -713,7 +713,7 @@ func (repo *blockchainRepo) CastBallot(userId, pubkey, txElectionOutId, candidat
 // 	// userId := fmt.Sprintf("candidates_1")
 
 // 	client := rpc.NewClient("http://localhost:8088/json-rpc")
-// 	chainRepo := NewblockchainRepository(client)
+// 	chainRepo := NewblockchainServicesitory(client)
 
 // 	// chainRepo.GetTransaction()
 // 	// chainRepo.StartElection(

@@ -79,6 +79,8 @@ func RegisterHandlers(
 		authMiddleware.AdminRequired(),
 		handler.StopElection,
 	)
+
+	router.GET("/elections/:id/results", handler.GetResults)
 }
 
 // CreateElection will create new Elections
@@ -268,16 +270,104 @@ func (handler electionHandler) DeleteElection(ctx *gin.Context) {
 
 // StartElection starts election
 func (handler *electionHandler) StartElection(ctx *gin.Context) {
+	var params requestParams
+	if err := ctx.ShouldBindUri(&params); err != nil {
+		handler.logger.Error(err)
+		utils.GinErrorResponse(
+			ctx,
+			customErr.BadRequest(err.Error()),
+		)
+		return
+	}
 
+	result, err := handler.service.Start(ctx, params.Id)
+
+	if err != nil {
+		handler.logger.Error(err)
+		switch err {
+		case entity.ErrNotFound:
+			utils.GinErrorResponse(
+				ctx,
+				customErr.NotFound("Election with provided ID does not exist"),
+			)
+			return
+		default:
+			utils.GinErrorResponse(
+				ctx,
+				customErr.InternalServerError(err.Error()),
+			)
+			return
+		}
+	}
+
+	handler.logger.Info(result)
 	ctx.JSON(http.StatusOK, gin.H{
-		// "data": result,
+		"data":    result,
+		"message": "Successfully started election",
 	})
 }
 
 // StopElection stops election
 func (handler *electionHandler) StopElection(ctx *gin.Context) {
 
+	var params requestParams
+	if err := ctx.ShouldBindUri(&params); err != nil {
+		handler.logger.Error(err)
+		utils.GinErrorResponse(
+			ctx,
+			customErr.BadRequest(err.Error()),
+		)
+		return
+	}
+
+	result, err := handler.service.Stop(ctx, params.Id)
+
+	if err != nil {
+		handler.logger.Error(err)
+		switch err {
+		case entity.ErrNotFound:
+			utils.GinErrorResponse(
+				ctx,
+				customErr.NotFound("Election with provided ID does not exist"),
+			)
+			return
+		default:
+			utils.GinErrorResponse(
+				ctx,
+				customErr.InternalServerError(err.Error()),
+			)
+			return
+		}
+	}
+
+	handler.logger.Info(result)
 	ctx.JSON(http.StatusOK, gin.H{
-		// "data": result,
+		"data":    result,
+		"message": "Successfully ended election",
+	})
+}
+
+func (handler electionHandler) GetResults(ctx *gin.Context) {
+	var params requestParams
+	if err := ctx.ShouldBindUri(&params); err != nil {
+		handler.logger.Error(err)
+		utils.GinErrorResponse(
+			ctx,
+			customErr.BadRequest(err.Error()),
+		)
+		return
+	}
+
+	results, err := handler.service.GetResults(ctx, params.Id)
+	if err != nil {
+		utils.GinErrorResponse(
+			ctx,
+			customErr.InternalServerError(err.Error()),
+		)
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"data":    results,
+		"message": "Success",
 	})
 }
